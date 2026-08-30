@@ -39,8 +39,8 @@ const orderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['Waiting for Payment', 'Payment Verification', 'Confirmed', 'In Production', 'Ready for Delivery', 'Delivered', 'Completed'],
-            default: 'Waiting for Payment',
+            enum: ['Waiting Payment', 'Payment Verification', 'Confirmed', 'In Production', 'Ready for Delivery', 'Delivered', 'Completed', 'Rejected'],
+            default: 'Waiting Payment',
         },
         shippingAddress: {
             type: String,

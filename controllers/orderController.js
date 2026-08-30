@@ -107,7 +107,7 @@ exports.createDummyOrder = async (req, res) => {
             paymentProof: null,
             customerNote: "This is a dummy order for testing purposes.",
             shippingAddress: user.address,
-            status: "Waiting for Payment",
+            status: "Waiting Payment",
         });
     } catch (error) {
         console.error(error);

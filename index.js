@@ -11,6 +11,8 @@ const adminRoutes = require("./routes/adminRoutes");
 const orderRoutes = require("./routes/orderRoute");
 const paymentRoutes = require("./routes/paymentRoute");
 
+const customerRoutes = require("./routes/customerRoutes");
+
 const app = express();
 
 connectDb();
@@ -79,6 +81,12 @@ app.use("/auth", authRoutes);
 app.use("/dashboard", requireLogin, adminRoutes);
 app.use("/dashboard/orders", requireLogin, orderRoutes);
 app.use("/dashboard/payments", requireLogin, paymentRoutes);
+
+
+app.use("/customer", requireLogin, customerRoutes);
+
+
+
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
 

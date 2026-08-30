@@ -3,6 +3,14 @@ const bcrypt = require("bcrypt");
 
 const SESSION_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
+// Helper function untuk menentukan URL redirect berdasarkan role
+const getRedirectUrlByRole = (role) => {
+  if (role === "admin") {
+    return "/dashboard";
+  }
+  return "/customer/home"; // Redirect customer ke route home
+};
+
 const renderAuthError = (
   res,
   view,
@@ -41,7 +49,7 @@ const setFlash = (req, type, title, message) => {
 const authController = {
   getRegister: (req, res) => {
     if (req.session.user) {
-      return res.redirect("/dashboard");
+      return res.redirect(getRedirectUrlByRole(req.session.user.role));
     }
 
     res.render("auth/register", { error: null, values: {}, errors: {} });
@@ -49,7 +57,7 @@ const authController = {
 
   getLogin: (req, res) => {
     if (req.session.user) {
-      return res.redirect("/dashboard");
+      return res.redirect(getRedirectUrlByRole(req.session.user.role));
     }
 
     res.render("auth/login", { error: null, values: {}, errors: {} });
@@ -97,7 +105,9 @@ const authController = {
           "Success",
           "Your account has been created and you are now logged in.",
         );
-        res.redirect("/dashboard");
+
+        // Redirect ke home customer
+        res.redirect(getRedirectUrlByRole(user.role));
       });
     } catch (error) {
       console.log(error);
@@ -110,29 +120,6 @@ const authController = {
       );
     }
   },
-
-//   login: async (req, res) => {
-//     try {
-//       const { email, username, password } = req.body;
-
-//       const user = await User.findOne({ email });
-//       if (!user) {
-//         return res.status(401).send("Email atau password salah");
-//       }
-
-//       req.session.user = {
-//         id: user._id,
-//         email: user.email,
-//         username: user.username,
-//         role: user.role,
-//       };
-
-//       res.redirect("/dashboard");
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).send("Terjadi kesalahan");
-//     }
-//   },
 
   login: async (req, res) => {
     try {
@@ -183,7 +170,10 @@ const authController = {
         }
 
         setFlash(req, "success", "Success", "You are now logged in.");
-        res.redirect("/dashboard");
+
+        // Redirect ke target URL (misal: /customer/home)
+        const targetUrl = getRedirectUrlByRole(user.role);
+        res.redirect(targetUrl);
       });
     } catch (error) {
       console.log(error);

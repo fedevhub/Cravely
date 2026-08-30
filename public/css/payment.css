@@ -1,3 +1,6 @@
+/* ==========================================================
+   RESET & GLOBAL STYLES
+   ========================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -28,6 +31,9 @@ body {
     overflow: hidden;
 }
 
+/* ==========================================================
+   LAYOUT CONTAINERS
+   ========================================================== */
 .product-container {
     display: flex;
     height: 100vh;
@@ -55,6 +61,9 @@ body {
     flex-shrink: 0;
 }
 
+/* ==========================================================
+   HEADER & FILTER / SEARCH
+   ========================================================== */
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -181,8 +190,13 @@ body {
 }
 
 /* ==========================================================
-   CARD & TABLES
+   CARD & TABLE (FIT 100% SCREEN)
    ========================================================== */
+.card-admin-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
 .custom-card {
     background: var(--card-bg);
     border-radius: 18px;
@@ -211,12 +225,19 @@ body {
     margin-bottom: 0;
 }
 
-/* Sticky Header Table */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .custom-table {
+    width: 100%;
+    min-width: 0;
+    /* Fleksibel mengikuti lebar container */
     margin-bottom: 0;
     border-collapse: separate;
     border-spacing: 0;
-    width: 100%;
 }
 
 .custom-table thead th {
@@ -228,8 +249,9 @@ body {
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-    padding: 0.9rem 1rem;
+    padding: 0.9rem 0.75rem;
     border: none;
+    white-space: nowrap;
 }
 
 .custom-table thead th:first-child {
@@ -243,14 +265,77 @@ body {
 }
 
 .custom-table tbody tr td {
-    padding: 1rem;
+    padding: 0.9rem 0.75rem;
     border-bottom: 1px solid #f5ede6;
     font-size: 0.88rem;
     color: var(--text-body);
+    vertical-align: middle;
 }
 
 .custom-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* Scrollbar halus untuk layar kecil */
+.table-responsive::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #d4a373;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #bc8a5f;
+}
+
+/* ==========================================================
+   TABLE CONTENT FORMATTING
+   ========================================================== */
+.payment-id {
+    font-weight: 700;
+    font-size: 13px;
+    color: #172b3a;
+    white-space: nowrap;
+}
+
+.order-id {
+    font-size: 13px;
+    font-weight: 600;
+    color: #243746;
+    white-space: nowrap;
+}
+
+.customer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.customer-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f0d09c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #513b20;
+    flex-shrink: 0;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: #172b3a;
+    font-size: 0.88rem;
 }
 
 .user-fullname {
@@ -264,15 +349,58 @@ body {
     color: #8c7d75;
 }
 
+.payment-method {
+    line-height: 1.4;
+    color: #253746;
+    white-space: nowrap;
+}
+
+.payment-amount {
+    font-weight: 700;
+    color: #b46f2a;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.submitted-date {
+    color: #4d5961;
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
 /* ==========================================================
-   STATUS BADGES & BUTTONS
+   BUTTONS & BADGES
    ========================================================== */
-.status-badge {
-    padding: 0.35rem 0.85rem;
-    border-radius: 50px;
+.proof-btn {
+    border: none;
+    background: transparent;
+    color: #b46f2a;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.proof-btn:hover {
+    color: #8c501b;
+}
+
+.proof-btn i {
+    margin-right: 3px;
+}
+
+/* Status Badges */
+.status-badge,
+.payment-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 20px;
     font-size: 0.78rem;
     font-weight: 600;
-    display: inline-block;
+    white-space: nowrap;
 }
 
 .badge-admin {
@@ -291,6 +419,94 @@ body {
     border: 1px solid #e0e0e0;
 }
 
+/* ==========================================================
+   STATUS BADGES (MATCH DESIGN)
+   ========================================================== */
+.payment-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    /* Bentuk kapsul/pill melengkung sempurna */
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    border: none;
+}
+
+.payment-status i {
+    font-size: 0.65rem;
+}
+
+/* Status: Pending / Under Verification / Pending Review */
+.payment-status.pending,
+.payment-status.verifying {
+    background-color: #fef4cd;
+    /* Kuning keemasan soft */
+    color: #d97706;
+    /* Teks cokelat/kuning tua */
+}
+
+/* Status: Verified / Confirmed */
+.payment-status.verified,
+.payment-status.confirmed {
+    background-color: #d8e8d8;
+    /* Hijau pastel lembut */
+    color: #2e6040;
+    /* Teks hijau tua */
+}
+
+/* Status: Rejected */
+.payment-status.rejected {
+    background-color: #fde2e2;
+    /* Merah muda pastel */
+    color: #dc2626;
+    /* Teks merah terang */
+}
+
+/* Actions */
+.payment-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.payment-actions form {
+    margin: 0;
+}
+
+.action-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.verify-btn {
+    background: #e4efdf;
+    color: #628653;
+}
+
+.verify-btn:hover {
+    background: #d5e5ce;
+}
+
+.reject-btn {
+    background: #fff0f0;
+    color: #e45c5c;
+}
+
+.reject-btn:hover {
+    background: #fde1e1;
+}
+
 .btn-action {
     background: transparent;
     border: none;
@@ -302,6 +518,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    cursor: pointer;
 }
 
 .btn-action.edit:hover {
@@ -314,7 +531,9 @@ body {
     color: #dc3545;
 }
 
-/* Container Modal */
+/* ==========================================================
+   MODAL STYLES
+   ========================================================== */
 .custom-modal-content {
     border-radius: 18px !important;
     overflow: hidden;
@@ -322,10 +541,8 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* Header Cokelat Melengkung Atas */
 .custom-modal-header {
     background-color: #b56c28 !important;
-    /* Warna cokelat sesuai gambar */
     padding: 18px 24px !important;
     border-bottom: none !important;
 }
@@ -335,7 +552,6 @@ body {
     font-weight: 700;
     font-size: 1.35rem;
     font-family: 'Georgia', 'Times New Roman', serif;
-    /* Mengikuti gaya serif di gambar */
 }
 
 .order-id-badge {
@@ -345,10 +561,18 @@ body {
     font-weight: normal;
 }
 
-/* Body Modal */
 .custom-modal-body {
     padding: 24px !important;
     background-color: #ffffff;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.custom-modal-body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
 .custom-modal-body .form-label {
@@ -370,7 +594,6 @@ body {
     color: #444444;
 }
 
-/* List Item Pesanan */
 .custom-item-container {
     border: 1px solid #e0e0e0;
     border-radius: 10px;
@@ -393,7 +616,6 @@ body {
     color: #b56c28 !important;
 }
 
-/* Tombol Batal & Simpan */
 .btn-modal-batal {
     background-color: #f7f3ee !important;
     color: #4a4a4a !important;
@@ -418,10 +640,8 @@ body {
     background-color: #98581e !important;
 }
 
-/* Membatasi tinggi modal & membuat body-nya scrollable */
 .modal-dialog-scrollable .modal-content {
     max-height: 85vh;
-    /* Batas tinggi modal relatif terhadap layar */
     overflow: hidden;
 }
 
@@ -430,166 +650,7 @@ body {
     padding: 24px !important;
 }
 
-/* Tetap bisa di-scroll tapi scrollbar-nya tersembunyi */
-.custom-modal-body {
-    overflow-y: auto;
-    /* Untuk Firefox */
-    scrollbar-width: none;
-    /* Untuk Internet Explorer / Edge lama */
-    -ms-overflow-style: none;
-}
-
-/* Untuk Chrome, Safari, dan Opera */
-.custom-modal-body::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-}
-
-.payment-id {
-    font-weight: 700;
-    font-size: 16px;
-    color: #172b3a;
-}
-
-.order-id {
-    font-size: 15px;
-    font-weight: 600;
-    color: #243746;
-}
-
-.customer-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.customer-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #f0d09c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    color: #513b20;
-}
-
-.customer-name {
-    font-weight: 600;
-    color: #172b3a;
-}
-
-.payment-method {
-    line-height: 1.4;
-    color: #253746;
-}
-
-.payment-amount {
-    font-weight: 700;
-    color: #b46f2a;
-    font-size: 16px;
-}
-
-.submitted-date {
-    color: #4d5961;
-    white-space: nowrap;
-}
-
-
-/* PROOF BUTTON */
-
-.proof-btn {
-    border: none;
-    background: transparent;
-    color: #b46f2a;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 5px 0;
-}
-
-.proof-btn:hover {
-    color: #8c501b;
-}
-
-.proof-btn i {
-    margin-right: 5px;
-}
-
-
-/* STATUS */
-
-.payment-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 13px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.payment-status.pending {
-    background: #fff1c7;
-    color: #d99b00;
-}
-
-.payment-status.verified {
-    background: #e5f0df;
-    color: #628653;
-}
-
-.payment-status.rejected {
-    background: #fde8e8;
-    color: #e55b5b;
-}
-
-
-/* ACTIONS */
-
-.payment-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.payment-actions form {
-    margin: 0;
-}
-
-.action-btn {
-    border: none;
-    border-radius: 12px;
-    padding: 7px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.verify-btn {
-    background: #e4efdf;
-    color: #628653;
-}
-
-.verify-btn:hover {
-    background: #d5e5ce;
-}
-
-.reject-btn {
-    background: #fff0f0;
-    color: #e45c5c;
-}
-
-.reject-btn:hover {
-    background: #fde1e1;
-}
-
-
-/* PAYMENT PROOF MODAL */
-
+/* Proof Modal Specifics */
 .proof-modal {
     border: none;
     border-radius: 18px;

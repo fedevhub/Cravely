@@ -38,12 +38,17 @@ const paymentSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        "Waiting for Payment",
+        "Waiting Payment",
         "Payment Verification",
         "Confirmed",
         "Rejected",
       ],
-      default: "Waiting for Payment",
+      default: "Waiting Payment",
+    },
+
+    paymentDate: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
