@@ -67,23 +67,58 @@ const requireLogin = (req, res, next) => {
       message: "Please log in first.",
     };
 
-    return res.redirect("/auth/login");
+    return res.redirect(`/auth/login?redirect=${encodeURIComponent(req.originalUrl)}`);
   }
 
   next();
+};
+
+const requireRole = (role) => {
+  return (req, res, next) => {
+    if (req.session.user?.role === role) {
+      return next();
+    }
+
+    redirectToFreshLogin(req, res, req.originalUrl);
+  };
+};
+
+const redirectToFreshLogin = (req, res, target) => {
+  const loginUrl = `/auth/login?redirect=${encodeURIComponent(target)}`;
+
+  if (!req.session.user) {
+    return res.redirect(loginUrl);
+  }
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    }
+
+    res.clearCookie("cravely.sid");
+    res.redirect(loginUrl);
+  });
 };
 
 app.get("/", (req, res) => {
   res.redirect("/auth/login");
 });
 
+app.get("/admin", (req, res) => {
+  redirectToFreshLogin(req, res, "/dashboard");
+});
+
+app.get("/customer", (req, res) => {
+  redirectToFreshLogin(req, res, "/customer/home");
+});
+
 app.use("/auth", authRoutes);
-app.use("/dashboard", requireLogin, adminRoutes);
-app.use("/dashboard/orders", requireLogin, orderRoutes);
-app.use("/dashboard/payments", requireLogin, paymentRoutes);
+app.use("/dashboard", requireLogin, requireRole("admin"), adminRoutes);
+app.use("/dashboard/orders", requireLogin, requireRole("admin"), orderRoutes);
+app.use("/dashboard/payments", requireLogin, requireRole("admin"), paymentRoutes);
 
 
-app.use("/customer", requireLogin, customerRoutes);
+app.use("/customer", requireLogin, requireRole("customer"), customerRoutes);
 
 
 

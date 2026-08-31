@@ -7,13 +7,16 @@
 body {
     font-family: 'Poppins', sans-serif;
     background: var(--cream);
+    padding-top: 58px;
 }
 
 /* ===== NAVBAR (shared - juga ada di corner.css) ===== */
 
 .custom-navbar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
 
     background: rgba(255, 255, 255, 0.15);
@@ -22,12 +25,19 @@ body {
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
-    padding: 18px 0;
+    padding: 8px 0;
+    transition: background-color .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.custom-navbar.is-scrolled {
+    background: #ffffff;
+    border-bottom-color: rgba(62, 42, 31, .08);
+    box-shadow: 0 8px 24px rgba(62, 42, 31, .08);
 }
 
 .logo-circle {
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: var(--caramel);
     color: white;
@@ -37,12 +47,12 @@ body {
     align-items: center;
 
     font-weight: 600;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .brand-name {
     font-family: 'Playfair Display', serif;
-    font-size: 34px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--brown);
 }
@@ -50,6 +60,7 @@ body {
 .nav-link {
     color: var(--brown);
     font-weight: 500;
+    font-size: 14px;
 }
 
 .nav-link:hover {
@@ -60,12 +71,12 @@ body {
     background: var(--caramel);
     color: white !important;
     border-radius: 50px;
-    padding: 6px 18px !important;
+    padding: 5px 14px !important;
 }
 
 .nav-icons a {
     color: var(--brown);
-    font-size: 22px;
+    font-size: 18px;
     transition: .3s;
 }
 
@@ -76,10 +87,14 @@ body {
 /* ===== HERO (Home banner) ===== */
 
 .hero-section {
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 58px);
     display: flex;
-    align-items: center;
-    padding: 25px 0;
+    align-items: flex-start;
+    padding: 8px 0 35px;
+}
+
+.hero-content {
+    padding-top: 24px;
 }
 
 .hero-badge {

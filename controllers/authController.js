@@ -3,12 +3,46 @@ const bcrypt = require("bcrypt");
 
 const SESSION_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
-// Helper function untuk menentukan URL redirect berdasarkan role
 const getRedirectUrlByRole = (role) => {
   if (role === "admin") {
     return "/dashboard";
   }
-  return "/customer/home"; // Redirect customer ke route home
+  return "/customer/home";
+};
+
+const normalizeRedirectTarget = (target) => {
+  if (!target || typeof target !== "string") {
+    return null;
+  }
+
+  if (target === "/admin" || target.startsWith("/dashboard")) {
+    return "/dashboard";
+  }
+
+  if (target === "/customer" || target.startsWith("/customer")) {
+    return "/customer/home";
+  }
+
+  return null;
+};
+
+const getRedirectUrlAfterLogin = (req, role) => {
+  const requestedTarget = normalizeRedirectTarget(req.session.redirectAfterLogin);
+  delete req.session.redirectAfterLogin;
+
+  return getAllowedRedirectUrl(role, requestedTarget);
+};
+
+const getAllowedRedirectUrl = (role, requestedTarget) => {
+  if (role === "admin" && requestedTarget === "/dashboard") {
+    return requestedTarget;
+  }
+
+  if (role === "customer" && requestedTarget === "/customer/home") {
+    return requestedTarget;
+  }
+
+  return getRedirectUrlByRole(role);
 };
 
 const renderAuthError = (
@@ -56,8 +90,14 @@ const authController = {
   },
 
   getLogin: (req, res) => {
+    const requestedTarget = normalizeRedirectTarget(req.query.redirect);
+
+    if (requestedTarget) {
+      req.session.redirectAfterLogin = requestedTarget;
+    }
+
     if (req.session.user) {
-      return res.redirect(getRedirectUrlByRole(req.session.user.role));
+      return res.redirect(getRedirectUrlAfterLogin(req, req.session.user.role));
     }
 
     res.render("auth/login", { error: null, values: {}, errors: {} });
@@ -143,6 +183,7 @@ const authController = {
       }
 
       const match = await bcrypt.compare(password, user.password);
+      const requestedTarget = normalizeRedirectTarget(req.session.redirectAfterLogin);
 
       if (!match) {
         return renderAuthError(
@@ -171,8 +212,7 @@ const authController = {
 
         setFlash(req, "success", "Success", "You are now logged in.");
 
-        // Redirect ke target URL (misal: /customer/home)
-        const targetUrl = getRedirectUrlByRole(user.role);
+        const targetUrl = getAllowedRedirectUrl(user.role, requestedTarget);
         res.redirect(targetUrl);
       });
     } catch (error) {
