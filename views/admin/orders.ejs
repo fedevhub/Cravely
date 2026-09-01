@@ -39,8 +39,8 @@
                         <div class="filter-search-row">
                             <div class="filter-tabs">
                                 <button class="filter-btn active" data-filter="all">All</button>
-                                <button class="filter-btn" data-filter="waiting for payment">
-                                    Waiting for Payment
+                                <button class="filter-btn" data-filter="waiting payment">
+                                    Waiting Payment
                                 </button>
                                 <button class="filter-btn" data-filter="payment verification">
                                     Payment Verification
@@ -218,8 +218,8 @@
                                                                     <div class="mb-4">
                                                                         <label class="form-label fw-bold">Update Status Pesanan</label>
                                                                         <select class="form-select" name="status">
-                                                                            <option value="Waiting for Payment" <%=order.status==='Waiting for Payment' ? 'selected'
-                                                                                : '' %>>Waiting for Payment</option>
+                                                                            <option value="Waiting Payment" <%=order.status==='Waiting Payment' ? 'selected'
+                                                                                : '' %>>Waiting Payment</option>
                                                                             <option value="Payment Verification" <%=order.status==='Payment Verification' ? 'selected'
                                                                                 : '' %>>Payment Verification</option>
                                                                             <option value="Confirmed" <%=order.status==='Confirmed' ? 'selected' : '' %>>Confirmed
@@ -274,6 +274,48 @@
             </div>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const filterButtons = document.querySelectorAll('.filter-btn');
+                const searchInput = document.getElementById('searchInput');
+                const productItems = document.querySelectorAll('.orders-item');
+
+                let currentFilter = 'all';
+                let searchQuery = '';
+
+                function filterProducts() {
+                    productItems.forEach(item => {
+                        const titleElement = item.querySelector('.card-title');
+                        const orderName = titleElement ? titleElement.textContent.toLowerCase() : '';
+
+                        const orderCategory = item.getAttribute('data-category');
+                        const matchesCategory = (currentFilter === 'all') || (productCategory === currentFilter);
+                        const matchesSearch = productName.includes(searchQuery);
+                        if (matchesCategory && matchesSearch) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        currentFilter = this.getAttribute('data-filter');
+                        filterProducts();
+                    });
+                });
+
+                searchInput.addEventListener('input', function () {
+                    searchQuery = this.value.toLowerCase().trim();
+                    filterProducts();
+                });
+            });
+        </script>
 </body>
 
 </html>

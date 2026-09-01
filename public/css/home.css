@@ -402,10 +402,9 @@ body {
     background: var(--caramel);
 }
 
-/* ===== HOW IT WORKS ===== */
 
 .how-section {
-    padding: 100px 0;
+    padding: 60px 0;
     background-color: #f0dac6;
 }
 
