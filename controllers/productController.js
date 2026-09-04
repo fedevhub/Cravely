@@ -9,8 +9,7 @@ const productController = {
 
       const totalProducts = await Product.countDocuments();
       const sweetCount = await Product.countDocuments({ category: "sweet" });
-      const savoryCount = 
-      await Product.countDocuments({ category: "savory" });
+      const savoryCount = await Product.countDocuments({ category: "savory" });
 
       res.render("admin/products", {
         products,
@@ -110,7 +109,7 @@ const productController = {
           const imgPath = path.join(
             __dirname,
             "../public/img",
-            existingProduct.image
+            existingProduct.image,
           );
           if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
         }
@@ -118,7 +117,7 @@ const productController = {
       }
 
       await Product.findByIdAndUpdate(req.params.id, data, {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       });
 
@@ -196,7 +195,7 @@ const productController = {
         name,
         price,
         category,
-        active,
+        isActive,
         description,
         fullDescription,
         weight,
@@ -207,7 +206,10 @@ const productController = {
 
       const ingredientsArray =
         typeof ingredients === "string"
-          ? ingredients.split(",").map((item) => item.trim()).filter(Boolean)
+          ? ingredients
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean)
           : [];
 
       // Jika upload multiple file galeri dari multer (req.files)
@@ -215,23 +217,41 @@ const productController = {
       if (req.files && req.files.length > 0) {
         galleryArray = req.files.map((file) => file.filename);
       } else if (typeof gallery === "string") {
-        galleryArray = gallery.split(",").map((url) => url.trim()).filter(Boolean);
+        galleryArray = gallery
+          .split(",")
+          .map((url) => url.trim())
+          .filter(Boolean);
       }
 
-      await Product.findByIdAndUpdate(id, {
-        name,
-        price: Number(price),
-        category,
-        isActive: active === "on" || active === true,
-        description,
-        detail: {
-          gallery: galleryArray,
-          fullDescription,
-          weight,
-          servings,
-          ingredients: ingredientsArray,
+      const existingProduct = await Product.findById(id);
+      if (!existingProduct) {
+        return res.status(404).send("Produk tidak ditemukan");
+      }
+
+      await Product.findByIdAndUpdate(
+        id,
+        {
+          name: name ?? existingProduct.name,
+          price: price === undefined ? existingProduct.price : Number(price),
+          category: category ?? existingProduct.category,
+          isActive: isActive || existingProduct.isActive,
+          description: description ?? existingProduct.description,
+          detail: {
+            gallery: galleryArray.length
+              ? galleryArray
+              : existingProduct.detail?.gallery || [],
+            fullDescription:
+              fullDescription ??
+              (existingProduct.detail?.fullDescription || ""),
+            weight: weight ?? (existingProduct.detail?.weight || ""),
+            servings: servings ?? (existingProduct.detail?.servings || ""),
+            ingredients: ingredientsArray.length
+              ? ingredientsArray
+              : existingProduct.detail?.ingredients || [],
+          },
         },
-      });
+        { returnDocument: "after", runValidators: true },
+      );
 
       res.redirect(`/dashboard/detailProducts/${id}`);
     } catch (error) {

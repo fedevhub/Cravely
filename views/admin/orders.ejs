@@ -14,6 +14,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/order.css">
+    <link rel="stylesheet" href="/css/modal.css">
 </head>
 
 <body>
@@ -42,17 +43,11 @@
                                 <button class="filter-btn" data-filter="waiting payment">
                                     Waiting Payment
                                 </button>
-                                <button class="filter-btn" data-filter="payment verification">
-                                    Payment Verification
-                                </button>
                                 <button class="filter-btn" data-filter="confirmed">
                                     Confirmed
                                 </button>
                                 <button class="filter-btn" data-filter="in production">
                                     In Production
-                                </button>
-                                <button class="filter-btn" data-filter="ready for delivery">
-                                    Ready for Delivery
                                 </button>
                                 <button class="filter-btn" data-filter="delivered">
                                     Delivered
@@ -135,7 +130,7 @@
                                                 <div class="modal fade" id="detailOrderModal<%= order._id %>" tabindex="-1"
                                                     aria-labelledby="detailOrderModalLabel<%= order._id %>" aria-hidden="true">
                                                     <!-- TAMBAHKAN modal-dialog-scrollable DI SINI -->
-                                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollacustom-card mb-3 mt-3 card-admin-wrapperble modal-md">
+                                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
                                                         <div class="modal-content custom-modal-content">
                                                 
                                                             <!-- Modal Header (Akan tetap diam di atas saat discroll) -->
@@ -220,14 +215,10 @@
                                                                         <select class="form-select" name="status">
                                                                             <option value="Waiting Payment" <%=order.status==='Waiting Payment' ? 'selected'
                                                                                 : '' %>>Waiting Payment</option>
-                                                                            <option value="Payment Verification" <%=order.status==='Payment Verification' ? 'selected'
-                                                                                : '' %>>Payment Verification</option>
                                                                             <option value="Confirmed" <%=order.status==='Confirmed' ? 'selected' : '' %>>Confirmed
                                                                             </option>
                                                                             <option value="In Production" <%=order.status==='In Production' ? 'selected' : '' %>>In
-                                                                                Production</option>
-                                                                            <option value="Ready for Delivery" <%=order.status==='Ready for Delivery' ? 'selected' : ''
-                                                                                %>>Ready for Delivery</option>
+                                                                                Production</option>            
                                                                             <option value="Delivered" <%=order.status==='Delivered' ? 'selected' : '' %>>Delivered
                                                                             </option>
                                                                             <option value="Completed" <%=order.status==='Completed' ? 'selected' : '' %>>Completed

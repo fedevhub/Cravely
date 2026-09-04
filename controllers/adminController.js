@@ -2,16 +2,31 @@ const Order = require("../models/OrderModel");
 const Payment = require("../models/PaymentModel");
 const Product = require("../models/ProductModel");
 const User = require("../models/UserModel");
+const PreOrderSetting = require("../models/PreOrderSettingModel");
 
 const statusConfig = [
-  { status: "Completed", color: "#477c50" },
-  { status: "In Production", color: "#c9803b" },
+  { status: "Waiting Payment", color: "#d5a34a" },
   { status: "Confirmed", color: "#7fa27f" },
-  { status: "Payment Verification", color: "#9b744f" },
+  { status: "In Production", color: "#c9803b" },
   { status: "Delivered", color: "#3d9381" },
+  { status: "Completed", color: "#477c50" },
+  { status: "Rejected", color: "#d95d5d" },
 ];
 
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 const formatShortCurrency = (value) => {
   if (value >= 1000000) {
@@ -32,7 +47,10 @@ const getInitials = (name = "") => {
     return "CU";
   }
 
-  return parts.slice(0, 2).map((part) => part[0].toUpperCase()).join("");
+  return parts
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join("");
 };
 
 exports.getDashboard = async (req, res) => {
@@ -40,27 +58,39 @@ exports.getDashboard = async (req, res) => {
     const now = new Date();
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
-    const [orders, payments, activeCustomers, products] = await Promise.all([
-      Order.find()
-        .populate("user", "fullname email")
-        .populate("items.product", "name category")
-        .sort({ createdAt: -1 }),
-      Payment.find().sort({ createdAt: -1 }),
-      User.countDocuments({ role: "customer" }),
-      Product.find().sort({ createdAt: -1 }),
-    ]);
+    const [orders, payments, activeCustomers, products, preOrderSetting] =
+      await Promise.all([
+        Order.find()
+          .populate("user", "fullname email")
+          .populate("items.product", "name category")
+          .sort({ createdAt: -1 }),
+        Payment.find().sort({ createdAt: -1 }),
+        User.countDocuments({ role: "customer" }),
+        Product.find().sort({ createdAt: -1 }),
+        PreOrderSetting.findOneAndUpdate(
+          { key: "current" },
+          { $setOnInsert: { isOpen: true } },
+          { returnDocument: "after", upsert: true },
+        ),
+      ]);
 
-    const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + (order.totalAmount || 0),
+      0,
+    );
     const pendingPayments = payments.filter((payment) =>
       ["Waiting Payment", "Payment Verification"].includes(payment.status),
     ).length;
 
     const recentOrders = orders.slice(0, 5).map((order) => ({
       id: order._id,
-      orderNumber: order.orderNumber || `CRV-${order._id.toString().slice(-6).toUpperCase()}`,
+      orderNumber:
+        order.orderNumber ||
+        `CRV-${order._id.toString().slice(-6).toUpperCase()}`,
       customerName: order.user?.fullname || "Customer",
       initials: getInitials(order.user?.fullname || "Customer"),
-      itemCount: order.items?.reduce((sum, item) => sum + (item.quantity || 0), 0) || 0,
+      itemCount:
+        order.items?.reduce((sum, item) => sum + (item.quantity || 0), 0) || 0,
       totalAmount: order.totalAmount || 0,
       status: order.status || "Waiting Payment",
     }));
@@ -81,13 +111,15 @@ exports.getDashboard = async (req, res) => {
 
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
-      const month = monthMap.get(`${orderDate.getFullYear()}-${orderDate.getMonth()}`);
+      const month = monthMap.get(
+        `${orderDate.getFullYear()}-${orderDate.getMonth()}`,
+      );
 
       if (!month || orderDate < sixMonthsAgo) {
         return;
       }
 
-      order.items.forEach((item) => {
+      (order.items || []).forEach((item) => {
         const product = item.product;
         const category = product?.category;
         const quantity = item.quantity || 0;
@@ -116,7 +148,8 @@ exports.getDashboard = async (req, res) => {
       count: orders.filter((order) => order.status === item.status).length,
     }));
 
-    const donutTotal = statusCounts.reduce((sum, item) => sum + item.count, 0) || 1;
+    const donutTotal =
+      statusCounts.reduce((sum, item) => sum + item.count, 0) || 1;
     let donutStart = 0;
     const donutSegments = statusCounts.map((item) => {
       const degrees = (item.count / donutTotal) * 360;
@@ -158,9 +191,42 @@ exports.getDashboard = async (req, res) => {
       statusCounts,
       donutGradient: donutSegments.join(", "),
       formatShortCurrency,
+      isPreOrderOpen: preOrderSetting.isOpen,
     });
   } catch (error) {
     console.error("Error getDashboard:", error);
     res.status(500).send("Gagal memuat dashboard admin");
+  }
+};
+
+exports.togglePreOrder = async (req, res) => {
+  try {
+    const currentSetting = await PreOrderSetting.findOne({ key: "current" });
+    const setting = currentSetting
+      ? await PreOrderSetting.findOneAndUpdate(
+          { key: "current" },
+          {
+            isOpen: !currentSetting.isOpen,
+            updatedBy: req.session.user?.id || null,
+          },
+          { returnDocument: "after" },
+        )      : await PreOrderSetting.create({
+          key: "current",
+          isOpen: false,
+          updatedBy: req.session.user?.id || null,
+        });
+
+    req.session.flash = {
+      type: "success",
+      title: setting.isOpen ? "Pre-order dibuka" : "Pre-order ditutup",
+      message: setting.isOpen
+        ? "Customer sekarang dapat melakukan pemesanan."
+        : "Customer tidak dapat melakukan pemesanan sampai pre-order dibuka kembali.",
+    };
+
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.error("Error togglePreOrder:", error);
+    res.status(500).send("Gagal mengubah status pre-order");
   }
 };

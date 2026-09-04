@@ -4,8 +4,19 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const uploadImage = require("../middlewares/uploadImage");
 const userController = require("../controllers/userController");
+const inventoryController = require("../controllers/inventoryController");
+const analyticsController = require("../controllers/analyticsController");
+const reviewController = require("../controllers/reviewController");
 
 router.get("/", adminController.getDashboard);
+router.post("/pre-order/toggle", adminController.togglePreOrder);
+router.get("/inventory", inventoryController.getInventory);
+router.post("/inventory/materials", inventoryController.createMaterial);
+router.post("/inventory/materials/:id", inventoryController.updateMaterial);
+router.post("/inventory/expenses", inventoryController.createExpense);
+router.get("/analytics", analyticsController.getAnalytics);
+router.get("/reviews", reviewController.getReviews);
+router.post("/reviews/:id/toggle", reviewController.toggleReview);
 
 router.get("/products", productController.getDaftarProduct);
 

@@ -18,6 +18,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/product-customer.css">
+    <link rel="stylesheet" href="/css/modal.css">
 </head>
 
 <body>
@@ -93,13 +94,15 @@
                                                 <%= Number(product.price).toLocaleString("id-ID") %>
                                             </div>
 
-                                            <button type="button" 
-                                                class="cart-button" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#editProdukModal<%= product._id %>">
+                                            <form method="POST" action="/customer/cart/<%= product._id %>">
+                                            <button type="submit"
+                                                class="cart-button <%= !isPreOrderOpen ? 'order-disabled' : '' %>"
+                                                <%= isPreOrderOpen ? '' : 'disabled' %>
+                                                title="<%= isPreOrderOpen ? 'Add to cart' : 'Pre-order sedang ditutup' %>">
                                                 <i class="fa-solid fa-cart-shopping"></i>
-                                                <span>Add to cart</span>
+                                                <span><%= isPreOrderOpen ? 'Add to cart' : 'Order Closed' %></span>
                                             </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

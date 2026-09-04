@@ -84,6 +84,12 @@ body {
     color: var(--caramel);
 }
 
+.nav-icons a.order-disabled-link {
+    cursor: not-allowed;
+    opacity: 0.45;
+    pointer-events: none;
+}
+
 /* ===== HERO (Home banner) ===== */
 
 .hero-section {

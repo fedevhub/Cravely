@@ -70,16 +70,6 @@
                 <% } %>
         </a>
 
-        <a href="/dashboard/pre-order" class="<%= currentPath === '/dashboard/pre-order' ? 'active' : '' %>">
-            <div class="nav-left">
-                <i class="far fa-calendar-alt"></i>
-                <span>Pre-Order Schedule</span>
-            </div>
-            <% if (currentPath==='/dashboard/pre-order' ) { %>
-                <i class="fas fa-chevron-right nav-arrow"></i>
-                <% } %>
-        </a>
-
         <a href="/dashboard/inventory" class="<%= currentPath === '/dashboard/inventory' ? 'active' : '' %>">
             <div class="nav-left">
                 <i class="fas fa-archive"></i>
@@ -99,18 +89,25 @@
                 <i class="fas fa-chevron-right nav-arrow"></i>
                 <% } %>
         </a>
+
+        <a href="/profile" class="<%= currentPath === '/profile' ? 'active' : '' %>">
+            <div class="nav-left">
+                <i class="fas fa-user-cog"></i>
+                <span>Profile</span>
+            </div>
+        </a>
     </div>
 
     <!-- 3. Footer (Tetap di bawah) -->
     <div class="sidebar-footer">
         <!-- 1. Notifications di bagian Bottom -->
-        <a href="/dashboard/notifications"
-            class="footer-link <%= currentPath === '/dashboard/notifications' ? 'active' : '' %>">
+        <a href="/notifications"
+            class="footer-link <%= currentPath === '/notifications' ? 'active' : '' %>">
             <div class="nav-left">
                 <i class="far fa-bell"></i>
                 <span>Notifications</span>
             </div>
-            <span class="badge">3</span>
+            <span class="badge">!</span>
         </a>
 
         <div class="user-profile">
@@ -125,7 +122,7 @@
             </div>
         </div>
 
-        <a href="/auth/logout" class="exit-btn">
+        <a href="/auth/logout" class="exit-btn" onclick="return confirm('Yakin ingin logout?')">
             <i class="fas fa-sign-out-alt"></i>
             <span>Exit Admin</span>
         </a>

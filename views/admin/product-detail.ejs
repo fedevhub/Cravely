@@ -15,6 +15,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="/css/detail-product.css">
+    <link rel="stylesheet" href="/css/modal.css">
 </head>
 
 <body>
@@ -228,7 +229,7 @@
         <div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-4">
-                    <form action="/products/<%= product._id %>/edit" method="POST">
+                    <form action="/dashboard/detailProducts/<%= product._id %>/update" method="POST">
                         <div class="modal-header border-bottom-0 pb-0">
                             <h5 class="modal-title fw-bold">Edit Detail Menu</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -247,10 +248,10 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold">Tipe Order</label>
-                                    <select name="isPreOrder" class="form-select">
-                                        <option value="false" <%=!product.isPreOrder ? 'selected' : '' %>>Ready Stock
+                                    <select name="isActive" class="form-select">
+                                        <option value="ready stok" <%=product.isActive === 'ready stok' ? 'selected' : '' %>>Ready Stock
                                         </option>
-                                        <option value="true" <%=product.isPreOrder ? 'selected' : '' %>>Pre-Order
+                                        <option value="pre order" <%=product.isActive === 'pre order' ? 'selected' : '' %>>Pre-Order
                                         </option>
                                     </select>
                                 </div>
@@ -262,12 +263,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ukuran / Berat</label>
                                     <input type="text" name="weight" class="form-control"
-                                        value="<%= product.weight || '' %>">
+                                        value="<%= product.detail?.weight || '' %>">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Porsi</label>
                                     <input type="text" name="servings" class="form-control"
-                                        value="<%= product.servings || '' %>">
+                                        value="<%= product.detail?.servings || '' %>">
                                 </div>
                             </div>
                         </div>
@@ -283,7 +284,7 @@
         <div class="modal fade" id="addDetailModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-4">
-                    <form action="/products/<%= product._id %>/add-detail" method="POST">
+                    <form action="/dashboard/detailProducts/<%= product._id %>/add" method="POST">
                         <div class="modal-header border-bottom-0 pb-0">
                             <h5 class="modal-title fw-bold">Tambah Detail Catatan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

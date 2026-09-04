@@ -12,10 +12,10 @@ const orderRoutes = require("./routes/orderRoute");
 const paymentRoutes = require("./routes/paymentRoute");
 
 const customerRoutes = require("./routes/customerRoutes");
+const profileController = require("./controllers/profileController");
+const notificationController = require("./controllers/notificationController");
 
 const app = express();
-
-connectDb();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -41,6 +41,17 @@ app.use(
 app.use((req, res, next) => {
   res.locals.session = req.session;
   res.locals.currentPath = req.path;
+  res.locals.currentPage =
+    req.path === "/customer/home"
+      ? "home"
+      : req.path.startsWith("/customer/products")
+        ? req.query.category === "sweet"
+          ? "sweet"
+          : req.query.category === "savory"
+            ? "savory"
+            : "products"
+        : "";
+  res.locals.isPreOrderOpen = true;
   res.locals.flash = req.session.flash || null;
 
   if (req.session.flash) {
@@ -67,7 +78,9 @@ const requireLogin = (req, res, next) => {
       message: "Please log in first.",
     };
 
-    return res.redirect(`/auth/login?redirect=${encodeURIComponent(req.originalUrl)}`);
+    return res.redirect(
+      `/auth/login?redirect=${encodeURIComponent(req.originalUrl)}`,
+    );
   }
 
   next();
@@ -115,18 +128,46 @@ app.get("/customer", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/dashboard", requireLogin, requireRole("admin"), adminRoutes);
 app.use("/dashboard/orders", requireLogin, requireRole("admin"), orderRoutes);
-app.use("/dashboard/payments", requireLogin, requireRole("admin"), paymentRoutes);
-
+app.use(
+  "/dashboard/payments",
+  requireLogin,
+  requireRole("admin"),
+  paymentRoutes,
+);
 
 app.use("/customer", requireLogin, requireRole("customer"), customerRoutes);
-
-
+app.get("/profile", requireLogin, profileController.getProfile);
+app.post("/profile", requireLogin, profileController.updateProfile);
+app.get(
+  "/notifications",
+  requireLogin,
+  notificationController.getNotifications,
+);
+app.post(
+  "/notifications/read-all",
+  requireLogin,
+  notificationController.readAll,
+);
 
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  "/vendor/chart.js",
+  express.static(path.join(__dirname, "node_modules/chart.js/dist")),
+);
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+const startServer = async () => {
+  try {
+    await connectDb();
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("Server tidak dijalankan karena koneksi MongoDB gagal.");
+    process.exitCode = 1;
+  }
+};
+
+startServer();

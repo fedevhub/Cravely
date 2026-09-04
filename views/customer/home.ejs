@@ -18,7 +18,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 hero-content">
                     <div class="hero-badge">
-                        Batch 12 - Pre Order now open
+                        Batch 12 - Pre Order <%= isPreOrderOpen ? 'now open' : 'currently closed' %>
                     </div>
 
                     <h1 class="hero-title">
@@ -28,7 +28,7 @@
 
                     <p class="hero-desc">
                         Small-batch artisan snacks made fresh each cycle.
-                        Browse Sweet & Savory, pre-order, and we'll handle the rest.
+                        <%= isPreOrderOpen ? "Browse Sweet & Savory, pre-order, and we'll handle the rest." : "Pre-order is currently closed. Please check back when the next batch opens." %>
                     </p>
 
                     <div class="hero-buttons">

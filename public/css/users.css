@@ -15,9 +15,9 @@
 }
 
 body {
-    background-color: var(--bg-main);
+    background: #fff8f0;
     font-family: var(--font-sans);
-    color: var(--text-body);
+    color: #332317;
     margin: 0;
 }
 
@@ -30,7 +30,7 @@ body {
 
 .main {
     flex: 1;
-    background: #f3f6fb;
+    background: #fff8f0;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -43,6 +43,7 @@ body {
     flex-direction: column;
     height: 100%;
     box-sizing: border-box;
+    background: #fff8f0;
 }
 
 /* Container khusus area tabel yang dapat di-scroll */

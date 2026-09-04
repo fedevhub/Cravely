@@ -73,7 +73,10 @@ exports.createPayment = async (req, res) => {
 
     // Ambil order asli dari database — jangan pernah percaya
     // angka totalAmount dari form/client.
-    const order = await Order.findById(orderId);
+    const order = await Order.findOne({
+      _id: orderId,
+      user: req.session.user.id,
+    });
 
     if (!order) {
       req.session.flash = {
@@ -121,7 +124,7 @@ exports.createPayment = async (req, res) => {
       icon: "fa-money-bill-transfer",
     };
 
-    res.redirect("/orders/" + order._id);
+    res.redirect("/customer/tracking/" + order._id);
   } catch (error) {
     console.error("Error creating payment:", error);
     res.status(500).json({
@@ -158,7 +161,7 @@ exports.updatePaymentStatus = async (req, res) => {
     const payment = await Payment.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     ).populate("order");
 
     if (!payment) {

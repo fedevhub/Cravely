@@ -141,7 +141,7 @@ const userController = {
       }
 
       await User.findByIdAndUpdate(req.params.id, data, {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       });
 

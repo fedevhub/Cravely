@@ -24,7 +24,8 @@ body {
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f3f6fb;
+    background: #fff8f0;
+    color: #332317;
     overflow: hidden;
 }
 
@@ -36,7 +37,7 @@ body {
 
 .main {
     flex: 1;
-    background: #f3f6fb;
+    background: #fff8f0;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -211,13 +212,13 @@ body {
     background: #ffffff;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 14px 32px rgba(30, 18, 13, 0.18);
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
-    border: 1px solid #f0e8e1;
+    border: 1px solid rgba(212, 154, 94, 0.7);
 }
 
 .product-card:hover {
