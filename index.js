@@ -12,6 +12,8 @@ const orderRoutes = require("./routes/orderRoute");
 const paymentRoutes = require("./routes/paymentRoute");
 
 const customerRoutes = require("./routes/customerRoutes");
+const profileController = require("./controllers/profileController");
+const Notification = require("./models/NotificationModel");
 
 const app = express();
 
@@ -38,9 +40,16 @@ app.use(
   }),
 );
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.session = req.session;
   res.locals.currentPath = req.path;
+  res.locals.notificationCount = 0;
+  if (req.session.user?.role === "admin") {
+    res.locals.notificationCount = await Notification.countDocuments({
+      recipient: req.session.user.id,
+      readAt: null,
+    });
+  }
   res.locals.flash = req.session.flash || null;
 
   if (req.session.flash) {
@@ -119,6 +128,8 @@ app.use("/dashboard/payments", requireLogin, requireRole("admin"), paymentRoutes
 
 
 app.use("/customer", requireLogin, requireRole("customer"), customerRoutes);
+app.get("/customer/profile", requireLogin, requireRole("customer"), profileController.getCustomerProfile);
+app.post("/customer/profile", requireLogin, requireRole("customer"), profileController.updateProfile);
 
 
 

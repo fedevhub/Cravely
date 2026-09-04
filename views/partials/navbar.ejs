@@ -1,4 +1,5 @@
 <nav class="navbar navbar-expand-lg custom-navbar">
+    <link rel="stylesheet" href="/css/theme.css">
     <div class="container-fluid px-4">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center gap-3" href="/customer/home">
@@ -27,16 +28,16 @@
         </div>
         <!-- Icons -->
         <div class="d-flex align-items-center gap-4 nav-icons">
-            <a href="#">
+            <a href="/customer/wishlist">
                 <i class="bi bi-heart"></i>
             </a>
-            <a href="#">
+            <a href="/customer/cart">
                 <i class="bi bi-cart3"></i>
             </a>
-            <a href="#">
+            <a href="/customer/profile">
                 <i class="bi bi-person"></i>
             </a>
-            <a href="/auth/logout" class="btn btn-sm btn-outline-danger temporary-logout">
+            <a href="/auth/logout" onclick="return confirm('Yakin ingin logout?')" class="btn btn-sm btn-outline-danger temporary-logout">
                 Logout
             </a>
         </div>

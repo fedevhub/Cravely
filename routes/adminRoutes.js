@@ -4,6 +4,8 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const uploadImage = require("../middlewares/uploadImage");
 const userController = require("../controllers/userController");
+const profileController = require("../controllers/profileController");
+const notificationController = require("../controllers/notificationController");
 
 router.get("/", adminController.getDashboard);
 
@@ -69,5 +71,8 @@ router.get("/users/edit/:id", userController.getEditUser);
 router.post("/users/edit/:id", userController.updateUser);
 
 router.post("/users/delete/:id", userController.deleteUser);
+router.get("/profile", profileController.getAdminProfile);
+router.post("/profile", profileController.updateProfile);
+router.get("/notifications", notificationController.getAdminNotifications);
 
 module.exports = router;

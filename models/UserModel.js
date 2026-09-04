@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    avatarInitials: {
+      type: String,
+      trim: true,
+      maxlength: 3,
+    },
   },
   { timestamps: true },
 );

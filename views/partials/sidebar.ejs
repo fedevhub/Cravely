@@ -1,4 +1,5 @@
 <div class="sidebar">
+    <link rel="stylesheet" href="/css/theme.css">
     <!-- 1. Header (Tetap di atas) -->
     <div class="sidebar-header">
         <div class="logo-circle">C</div>
@@ -110,11 +111,11 @@
                 <i class="far fa-bell"></i>
                 <span>Notifications</span>
             </div>
-            <span class="badge">3</span>
+            <span class="badge"><%= typeof notificationCount === 'number' ? notificationCount : '' %></span>
         </a>
 
-        <div class="user-profile">
-            <div class="avatar">A</div>
+        <a class="user-profile text-decoration-none" href="/dashboard/profile">
+            <div class="avatar"><%= session.user?.username?.slice(0, 1).toUpperCase() || 'A' %></div>
             <div class="user-info">
                 <span class="user-name">
                     <%= session.user ? session.user.username : "User" %>
@@ -122,10 +123,10 @@
                 <span class="user-email">
                     <%= session.user ? session.user.email : "user@cravely.id" %>
                 </span>
-            </div>
+            </a>
         </div>
 
-        <a href="/auth/logout" class="exit-btn">
+        <a href="/auth/logout" onclick="return confirm('Yakin ingin logout?')" class="exit-btn">
             <i class="fas fa-sign-out-alt"></i>
             <span>Exit Admin</span>
         </a>

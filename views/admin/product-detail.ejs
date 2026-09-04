@@ -60,8 +60,8 @@
                             </div>
 
 
-                            <% if (product.gallery && product.gallery.length> 0) { %>
-                                <% product.gallery.forEach(imgUrl=> {
+                            <% if (product.detail && product.detail.gallery && product.detail.gallery.length> 0) { %>
+                                <% product.detail.gallery.forEach(imgUrl=> {
                                     let gallerySrc = 'https://placehold.co/150x150/f7f2ec/4a2c11?text=Menu';
                                     if (imgUrl) {
                                     if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://') ||
@@ -126,7 +126,7 @@
                                             <span class="d-block text-muted x-small uppercase tracking-wider">Ukuran /
                                                 Berat</span>
                                             <strong class="text-dark">
-                                                <%= product.weight || '-' %>
+                                                <%= product.detail && product.detail.weight || '-' %>
                                             </strong>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@
                                             <span
                                                 class="d-block text-muted x-small uppercase tracking-wider">Porsi</span>
                                             <strong class="text-dark">
-                                                <%= product.servings || '-' %>
+                                                <%= product.detail && product.detail.servings || '-' %>
                                             </strong>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                                 <i class="fa-solid fa-seedling me-2"></i> Bahan Utama
                             </button>
                         </li>
-                        <% if (product.details && product.details.length> 0) { %>
+                        <% if (product.detail && product.detail.ingredients && product.detail.ingredients.length> 0) { %>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="extra-tab" data-bs-toggle="tab"
                                     data-bs-target="#extra-pane" type="button" role="tab">
@@ -179,15 +179,15 @@
 
                         <div class="tab-pane fade show active text-secondary lh-lg" id="desc-pane" role="tabpanel">
                             <p class="mb-0">
-                                <%= product.fullDescription || product.description
+                                <%= product.detail && product.detail.fullDescription || product.description
                                     || 'Belum ada penjelasan detail tambahan untuk menu ini.' %>
                             </p>
                         </div>
 
                         <div class="tab-pane fade" id="ingredients-pane" role="tabpanel">
-                            <% if (product.ingredients && product.ingredients.length> 0) { %>
+                            <% if (product.detail && product.detail.ingredients && product.detail.ingredients.length> 0) { %>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <% product.ingredients.forEach(item=> { %>
+                                    <% product.detail.ingredients.forEach(item=> { %>
                                         <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-normal">
                                             <i class="fa-solid fa-leaf text-success me-1"></i>
                                             <%= item %>
@@ -201,17 +201,17 @@
                         </div>
 
 
-                        <% if (product.details && product.details.length> 0) { %>
+                        <% if (product.detail && product.detail.ingredients && product.detail.ingredients.length> 0) { %>
                             <div class="tab-pane fade" id="extra-pane" role="tabpanel">
                                 <div class="row g-3">
-                                    <% product.details.forEach(detail=> { %>
+                                    <% product.detail.ingredients.forEach(detail=> { %>
                                         <div class="col-md-6">
                                             <div class="p-3 border rounded-3 bg-light">
                                                 <h6 class="fw-bold text-dark mb-1">
-                                                    <%= detail.title %>
+                                                    <%= detail %>
                                                 </h6>
                                                 <p class="text-muted small mb-0">
-                                                    <%= detail.content %>
+                                                    Bahan utama menu
                                                 </p>
                                             </div>
                                         </div>
@@ -262,12 +262,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Ukuran / Berat</label>
                                     <input type="text" name="weight" class="form-control"
-                                        value="<%= product.weight || '' %>">
+                                        value="<%= product.detail && product.detail.weight || '' %>">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Porsi</label>
                                     <input type="text" name="servings" class="form-control"
-                                        value="<%= product.servings || '' %>">
+                                        value="<%= product.detail && product.detail.servings || '' %>">
                                 </div>
                             </div>
                         </div>

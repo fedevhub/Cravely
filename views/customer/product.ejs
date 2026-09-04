@@ -93,13 +93,15 @@
                                                 <%= Number(product.price).toLocaleString("id-ID") %>
                                             </div>
 
-                                            <button type="button" 
-                                                class="cart-button" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#editProdukModal<%= product._id %>">
+                                            <form method="post" action="/customer/cart/add/<%= product._id %>" class="d-inline">
+                                            <button type="submit" class="cart-button">
                                                 <i class="fa-solid fa-cart-shopping"></i>
                                                 <span>Add to cart</span>
                                             </button>
+                                            </form>
+                                            <form method="post" action="/customer/wishlist/toggle/<%= product._id %>" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">♡</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

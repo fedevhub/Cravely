@@ -46,10 +46,11 @@
                     <% } %>
                 </div>
 
-                <button type="button" class="cart-button mb-4">
+                <form method="post" action="/customer/cart/add/<%= product._id %>" class="d-inline"><button type="submit" class="cart-button mb-4">
                     <i class="bi bi-cart3"></i>
                     <span>Add to cart</span>
-                </button>
+                </button></form>
+                <form method="post" action="/customer/wishlist/toggle/<%= product._id %>" class="d-inline"><button type="submit" class="btn btn-outline-secondary mb-4"><i class="bi bi-heart"></i> <%= isFavorite ? "Hapus favorit" : "Sukai menu" %></button></form>
 
                 <div class="row g-3">
                     <div class="col-sm-6">
