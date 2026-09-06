@@ -1,10 +1,7 @@
 <nav class="navbar navbar-expand-lg custom-navbar">
   <div class="container-fluid px-4">
     <!-- Logo -->
-    <a
-      class="navbar-brand d-flex align-items-center gap-3"
-      href="/customer/home"
-    >
+    <a class="navbar-brand d-flex align-items-center gap-3" href="/customer/home">
       <div class="logo-circle">C</div>
       <span class="brand-name"> Cravely </span>
     </a>
@@ -16,10 +13,7 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div
-      class="collapse navbar-collapse justify-content-center"
-      id="navbarMenu"
-    >
+    <div class="collapse navbar-collapse justify-content-center" id="navbarMenu">
       <ul class="navbar-nav gap-lg-4">
         <li class="nav-item">
           <a
@@ -46,8 +40,11 @@
     </div>
     <!-- Icons -->
     <div class="d-flex align-items-center gap-4 nav-icons">
-      <a href="/customer/wishlist">
-        <i class="bi bi-heart"></i>
+      <a href="/customer/wishlist" class="nav-icon-link position-relative" title="Wishlist">
+        <i class="bi <%= wishlistCount > 0 ? 'bi-heart-fill text-danger' : 'bi-heart' %>"></i>
+        <% if (wishlistCount > 0) { %>
+        <span class="navbar-badge wishlist-badge"><%= wishlistCount %></span>
+        <% } %>
       </a>
       <a
         href="<%= isPreOrderOpen ? '/customer/cart' : '#' %>"
@@ -56,6 +53,9 @@
         title="<%= isPreOrderOpen ? 'Cart' : 'Pre-order sedang ditutup' %>"
       >
         <i class="bi bi-cart3"></i>
+        <% if (cartCount > 0) { %>
+        <span class="navbar-badge cart-badge"><%= cartCount %></span>
+        <% } %>
       </a>
       <a href="/profile">
         <i class="bi bi-person"></i>
@@ -74,19 +74,19 @@
   </div>
 </nav>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const navbar = document.querySelector(".custom-navbar");
+  document.addEventListener('DOMContentLoaded', function () {
+    const navbar = document.querySelector('.custom-navbar');
 
     if (!navbar) {
       return;
     }
 
     function updateNavbarBackground() {
-      navbar.classList.toggle("is-scrolled", window.scrollY > 8);
+      navbar.classList.toggle('is-scrolled', window.scrollY > 8);
     }
 
     updateNavbarBackground();
-    window.addEventListener("scroll", updateNavbarBackground, {
+    window.addEventListener('scroll', updateNavbarBackground, {
       passive: true,
     });
   });

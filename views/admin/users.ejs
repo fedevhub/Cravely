@@ -250,7 +250,8 @@
                         </div>
 
                         <div class="modal-body">
-                            <form action="/dashboard/users/edit/<%= admin._id %>" method="POST">
+                            <form action="/dashboard/users/edit/<%= admin._id %>" method="POST" class="needs-confirm"
+                                data-confirm-message="Simpan perubahan user ini?">
                                 <div class="mb-3">
                                     <label class="form-label">Nama Lengkap</label>
                                     <input type="text" class="form-control" name="fullname"
@@ -319,7 +320,8 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    <form action="/dashboard/users/tambah" method="POST">
+                                    <form action="/dashboard/users/tambah" method="POST" class="needs-confirm"
+                                        data-confirm-message="Tambah user baru ini?">
                                         <div class="mb-3">
                                             <label for="fullname" class="form-label">Nama Lengkap</label>
                                             <input type="text" class="form-control" id="fullname" name="fullname"
@@ -388,17 +390,17 @@
                                     </button>
                                     <span class="confirm-modal-spark one"></span>
                                     <span class="confirm-modal-spark two"></span>
-                    
+
                                     <div class="confirm-modal-icon">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </div>
-                    
+
                                     <h2 class="confirm-modal-title">Hapus Data?</h2>
                                     <p class="confirm-modal-message">
                                         Apakah kamu yakin ingin menghapus data <strong id="deleteUserName" style="color: #4b3421;">user
                                             ini</strong>?
                                     </p>
-                    
+
                                     <div class="confirm-modal-actions">
                                         <button type="button" class="btn-confirm-cancel" data-bs-dismiss="modal">Batal</button>
                                         <form id="formDeleteUser" method="POST" action="" style="margin: 0;">
@@ -413,6 +415,7 @@
                     </div>
 
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                    <%- include('../partials/confirm-modal') %>
                     <%- include('../partials/status-modal') %>
 
                         <% if (typeof editUser !=='undefined' && editUser) { %>

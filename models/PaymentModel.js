@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema(
   {
@@ -10,13 +10,13 @@ const paymentSchema = new mongoose.Schema(
 
     order: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
+      ref: 'Order',
       required: true,
     },
 
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
 
@@ -37,13 +37,8 @@ const paymentSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "Waiting Payment",
-        "Payment Verification",
-        "Confirmed",
-        "Rejected",
-      ],
-      default: "Waiting Payment",
+      enum: ['Waiting Payment', 'Payment Verification', 'Confirmed', 'Rejected'],
+      default: 'Waiting Payment',
     },
 
     paymentDate: {
@@ -56,4 +51,4 @@ const paymentSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("Payment", paymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema);

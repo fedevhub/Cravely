@@ -1,6 +1,6 @@
-const Product = require("../models/ProductModel");
-const fs = require("fs");
-const path = require("path");
+const Product = require('../models/ProductModel');
+const fs = require('fs');
+const path = require('path');
 
 const productController = {
   getDaftarProduct: async (req, res) => {
@@ -8,33 +8,33 @@ const productController = {
       const products = await Product.find();
 
       const totalProducts = await Product.countDocuments();
-      const sweetCount = await Product.countDocuments({ category: "sweet" });
-      const savoryCount = await Product.countDocuments({ category: "savory" });
+      const sweetCount = await Product.countDocuments({ category: 'sweet' });
+      const savoryCount = await Product.countDocuments({ category: 'savory' });
 
-      res.render("admin/products", {
+      res.render('admin/products', {
         products,
         editProduct: null,
-        pageTitle: "Manajemen Produk",
+        pageTitle: 'Manajemen Produk',
         productLength: totalProducts,
         productCountSweet: sweetCount,
         productCountSavory: savoryCount,
       });
     } catch (error) {
-      console.error("Error getDaftarProduct:", error);
-      res.status(500).send("Gagal ambil data");
+      console.error('Error getDaftarProduct:', error);
+      res.status(500).send('Gagal ambil data');
     }
   },
 
   getTambahProduct: async (req, res) => {
     try {
       const product = await Product.find();
-      res.render("admin/products", {
+      res.render('admin/products', {
         product,
-        pageTitle: "Manajemen Produk",
+        pageTitle: 'Manajemen Produk',
       });
     } catch (err) {
-      console.error("Error getTambahProduct:", err);
-      res.status(500).send("Gagal memuat form tambah produk");
+      console.error('Error getTambahProduct:', err);
+      res.status(500).send('Gagal memuat form tambah produk');
     }
   },
 
@@ -50,19 +50,24 @@ const productController = {
         price: price || null,
         isActive: isActive || null,
         image: image,
+        stock: Number(req.body.stock) || 0,
+        stockCapacity: Number(req.body.stockCapacity) || 20,
+        minimumStock: Number(req.body.minimumStock) || 5,
+        discount: Number(req.body.discount) || 0,
+        isBestSeller: req.body.bestSeller === 'on' || req.body.bestSeller === 'true',
       });
 
       req.session.flash = {
-        type: "success",
-        title: "Product Created",
-        message: "The product has been created successfully.",
-        icon: "fa-box-open",
+        type: 'success',
+        title: 'Product Created',
+        message: 'The product has been created successfully.',
+        icon: 'fa-box-open',
       };
 
-      res.redirect("/dashboard/products");
+      res.redirect('/dashboard/products');
     } catch (err) {
-      console.error("Error tambahProduct:", err);
-      res.status(500).send("Gagal tambah produk: " + err.message);
+      console.error('Error tambahProduct:', err);
+      res.status(500).send('Gagal tambah produk: ' + err.message);
     }
   },
 
@@ -72,17 +77,17 @@ const productController = {
       const products = await Product.find();
 
       if (!product) {
-        return res.status(404).send("Data produk tidak ditemukan");
+        return res.status(404).send('Data produk tidak ditemukan');
       }
 
-      res.render("admin/products", {
+      res.render('admin/products', {
         products,
         editProduct: product,
-        pageTitle: "Manajemen Produk",
+        pageTitle: 'Manajemen Produk',
       });
     } catch (err) {
       console.error(err);
-      res.status(500).send("Gagal memuat form edit");
+      res.status(500).send('Gagal memuat form edit');
     }
   },
 
@@ -92,7 +97,7 @@ const productController = {
 
       const existingProduct = await Product.findById(req.params.id);
       if (!existingProduct) {
-        return res.status(404).send("Data tidak ditemukan");
+        return res.status(404).send('Data tidak ditemukan');
       }
 
       const data = {
@@ -102,36 +107,49 @@ const productController = {
         price: req.body.price ?? existingProduct.price,
         image: req.body.image ?? existingProduct.image,
         isActive: req.body.isActive ?? existingProduct.isActive,
+        stock:
+          req.body.stock !== undefined && req.body.stock !== ''
+            ? Number(req.body.stock)
+            : existingProduct.stock,
+        stockCapacity:
+          req.body.stockCapacity !== undefined && req.body.stockCapacity !== ''
+            ? Number(req.body.stockCapacity)
+            : existingProduct.stockCapacity,
+        minimumStock:
+          req.body.minimumStock !== undefined && req.body.minimumStock !== ''
+            ? Number(req.body.minimumStock)
+            : existingProduct.minimumStock,
+        discount:
+          req.body.discount !== undefined && req.body.discount !== ''
+            ? Number(req.body.discount)
+            : existingProduct.discount,
+        isBestSeller: req.body.bestSeller === 'on' || req.body.bestSeller === 'true',
       };
 
       if (image) {
         if (existingProduct.image) {
-          const imgPath = path.join(
-            __dirname,
-            "../public/img",
-            existingProduct.image,
-          );
+          const imgPath = path.join(__dirname, '../public/img', existingProduct.image);
           if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
         }
         data.image = image;
       }
 
       await Product.findByIdAndUpdate(req.params.id, data, {
-        returnDocument: "after",
+        returnDocument: 'after',
         runValidators: true,
       });
 
       req.session.flash = {
-        type: "success",
-        title: "Product Updated",
-        message: "The product has been updated successfully.",
-        icon: "fa-box-open",
+        type: 'success',
+        title: 'Product Updated',
+        message: 'The product has been updated successfully.',
+        icon: 'fa-box-open',
       };
 
-      res.redirect("/dashboard/products");
+      res.redirect('/dashboard/products');
     } catch (err) {
-      console.error("Error updateProduct:", err);
-      res.status(500).send("Gagal update: " + err.message);
+      console.error('Error updateProduct:', err);
+      res.status(500).send('Gagal update: ' + err.message);
     }
   },
 
@@ -140,11 +158,11 @@ const productController = {
       const product = await Product.findById(req.params.id);
 
       if (!product) {
-        return res.status(404).send("Produk tidak ditemukan");
+        return res.status(404).send('Produk tidak ditemukan');
       }
 
       if (product.image) {
-        const imgPath = path.join(__dirname, "../public/img", product.image);
+        const imgPath = path.join(__dirname, '../public/img', product.image);
 
         if (fs.existsSync(imgPath)) {
           fs.unlinkSync(imgPath);
@@ -154,16 +172,16 @@ const productController = {
       await Product.findByIdAndDelete(req.params.id);
 
       req.session.flash = {
-        type: "success",
-        title: "Product Deleted",
-        message: "The product has been deleted successfully.",
-        icon: "fa-box-trash",
+        type: 'success',
+        title: 'Product Deleted',
+        message: 'The product has been deleted successfully.',
+        icon: 'fa-box-trash',
       };
 
-      res.redirect("/dashboard/products");
+      res.redirect('/dashboard/products');
     } catch (err) {
-      console.error("Error deleteProduct:", err);
-      res.status(500).send("Gagal hapus produk");
+      console.error('Error deleteProduct:', err);
+      res.status(500).send('Gagal hapus produk');
     }
   },
 
@@ -174,16 +192,16 @@ const productController = {
     try {
       const product = await Product.findById(req.params.id);
       if (!product) {
-        return res.status(404).send("Produk tidak ditemukan");
+        return res.status(404).send('Produk tidak ditemukan');
       }
 
-      res.render("admin/product-detail", {
+      res.render('admin/product-detail', {
         product,
-        pageTitle: "Detail Produk",
+        pageTitle: 'Detail Produk',
       });
     } catch (error) {
-      console.error("Error getDetailProduct:", error);
-      res.status(500).send("Gagal memuat detail produk");
+      console.error('Error getDetailProduct:', error);
+      res.status(500).send('Gagal memuat detail produk');
     }
   },
 
@@ -205,9 +223,9 @@ const productController = {
       } = req.body;
 
       const ingredientsArray =
-        typeof ingredients === "string"
+        typeof ingredients === 'string'
           ? ingredients
-              .split(",")
+              .split(',')
               .map((item) => item.trim())
               .filter(Boolean)
           : [];
@@ -216,16 +234,16 @@ const productController = {
       let galleryArray = [];
       if (req.files && req.files.length > 0) {
         galleryArray = req.files.map((file) => file.filename);
-      } else if (typeof gallery === "string") {
+      } else if (typeof gallery === 'string') {
         galleryArray = gallery
-          .split(",")
+          .split(',')
           .map((url) => url.trim())
           .filter(Boolean);
       }
 
       const existingProduct = await Product.findById(id);
       if (!existingProduct) {
-        return res.status(404).send("Produk tidak ditemukan");
+        return res.status(404).send('Produk tidak ditemukan');
       }
 
       await Product.findByIdAndUpdate(
@@ -237,26 +255,22 @@ const productController = {
           isActive: isActive || existingProduct.isActive,
           description: description ?? existingProduct.description,
           detail: {
-            gallery: galleryArray.length
-              ? galleryArray
-              : existingProduct.detail?.gallery || [],
-            fullDescription:
-              fullDescription ??
-              (existingProduct.detail?.fullDescription || ""),
-            weight: weight ?? (existingProduct.detail?.weight || ""),
-            servings: servings ?? (existingProduct.detail?.servings || ""),
+            gallery: galleryArray.length ? galleryArray : existingProduct.detail?.gallery || [],
+            fullDescription: fullDescription ?? (existingProduct.detail?.fullDescription || ''),
+            weight: weight ?? (existingProduct.detail?.weight || ''),
+            servings: servings ?? (existingProduct.detail?.servings || ''),
             ingredients: ingredientsArray.length
               ? ingredientsArray
               : existingProduct.detail?.ingredients || [],
           },
         },
-        { returnDocument: "after", runValidators: true },
+        { returnDocument: 'after', runValidators: true },
       );
 
       res.redirect(`/dashboard/detailProducts/${id}`);
     } catch (error) {
-      console.error("Error updateDetailProduct:", error);
-      res.status(500).send("Gagal memperbarui detail produk");
+      console.error('Error updateDetailProduct:', error);
+      res.status(500).send('Gagal memperbarui detail produk');
     }
   },
 

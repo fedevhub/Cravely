@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/product-customer.css">
     <link rel="stylesheet" href="/css/modal.css">
+    <link rel="stylesheet" href="/css/enhancements.css">
 </head>
 
 <body>
@@ -71,7 +72,17 @@
                                             <% } else { %>
                                                 <span class="badge-status badge-preorder">Pre Order</span>
                                             <% } %>
+                                            <% if (product.isBestSeller) { %>
+                                                <span class="badge-best">Best Seller</span>
+                                            <% } %>
                                         </div>
+
+                                        <form method="POST" action="/customer/wishlist/<%= product._id %>" class="wishlist-form">
+                                            <button type="submit" class="card-wishlist-btn <%= wishlistIds.includes(product._id.toString()) ? 'active-heart' : '' %>"
+                                                title="<%= wishlistIds.includes(product._id.toString()) ? 'Hapus dari wishlist' : 'Tambah ke wishlist' %>">
+                                                <i class="fa-<%= wishlistIds.includes(product._id.toString()) ? 'solid' : 'regular' %> fa-heart"></i>
+                                            </button>
+                                        </form>
 
                                         <div class="badge-right">
                                             <span class="badge-category">
@@ -90,8 +101,14 @@
 
                                         <div class="card-footer-custom">
                                             <div class="price">
+                                                <% if (product.discount > 0) { %>
+                                                    <span class="price-old">Rp <%= Number(product.price).toLocaleString("id-ID") %></span>
+                                                <% } %>
                                                 <span class="currency">Rp</span>
-                                                <%= Number(product.price).toLocaleString("id-ID") %>
+                                                <%= Number(product.price * (1 - (product.discount || 0) / 100)).toLocaleString("id-ID") %>
+                                                <% if (product.discount > 0) { %>
+                                                    <span class="badge-discount">-<%= product.discount %>%</span>
+                                                <% } %>
                                             </div>
 
                                             <form method="POST" action="/customer/cart/<%= product._id %>">
@@ -174,7 +191,7 @@
                 }
 
                 card.addEventListener('click', function (event) {
-                    if (event.target.closest('button, a')) {
+                    if (event.target.closest('button, a, form')) {
                         return;
                     }
 

@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const preOrderSettingSchema = new mongoose.Schema(
   {
     key: {
       type: String,
       unique: true,
-      default: "current",
+      default: 'current',
     },
     isOpen: {
       type: Boolean,
@@ -13,7 +13,7 @@ const preOrderSettingSchema = new mongoose.Schema(
     },
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       default: null,
     },
   },
@@ -21,5 +21,4 @@ const preOrderSettingSchema = new mongoose.Schema(
 );
 
 module.exports =
-  mongoose.models.PreOrderSetting ||
-  mongoose.model("PreOrderSetting", preOrderSettingSchema);
+  mongoose.models.PreOrderSetting || mongoose.model('PreOrderSetting', preOrderSettingSchema);

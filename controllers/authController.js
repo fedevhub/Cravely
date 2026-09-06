@@ -1,26 +1,26 @@
-const User = require("../models/UserModel");
-const bcrypt = require("bcrypt");
+const User = require('../models/UserModel');
+const bcrypt = require('bcrypt');
 
 const SESSION_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 const getRedirectUrlByRole = (role) => {
-  if (role === "admin") {
-    return "/dashboard";
+  if (role === 'admin') {
+    return '/dashboard';
   }
-  return "/customer/home";
+  return '/customer/home';
 };
 
 const normalizeRedirectTarget = (target) => {
-  if (!target || typeof target !== "string") {
+  if (!target || typeof target !== 'string') {
     return null;
   }
 
-  if (target === "/admin" || target.startsWith("/dashboard")) {
-    return "/dashboard";
+  if (target === '/admin' || target.startsWith('/dashboard')) {
+    return '/dashboard';
   }
 
-  if (target === "/customer" || target.startsWith("/customer")) {
-    return "/customer/home";
+  if (target === '/customer' || target.startsWith('/customer')) {
+    return '/customer/home';
   }
 
   return null;
@@ -34,25 +34,18 @@ const getRedirectUrlAfterLogin = (req, role) => {
 };
 
 const getAllowedRedirectUrl = (role, requestedTarget) => {
-  if (role === "admin" && requestedTarget === "/dashboard") {
+  if (role === 'admin' && requestedTarget === '/dashboard') {
     return requestedTarget;
   }
 
-  if (role === "customer" && requestedTarget === "/customer/home") {
+  if (role === 'customer' && requestedTarget === '/customer/home') {
     return requestedTarget;
   }
 
   return getRedirectUrlByRole(role);
 };
 
-const renderAuthError = (
-  res,
-  view,
-  message,
-  values = {},
-  status = 400,
-  errors = {},
-) => {
+const renderAuthError = (res, view, message, values = {}, status = 400, errors = {}) => {
   return res.status(status).render(view, {
     error: message,
     values,
@@ -86,7 +79,7 @@ const authController = {
       return res.redirect(getRedirectUrlByRole(req.session.user.role));
     }
 
-    res.render("auth/register", { error: null, values: {}, errors: {} });
+    res.render('auth/register', { error: null, values: {}, errors: {} });
   },
 
   getLogin: (req, res) => {
@@ -100,20 +93,12 @@ const authController = {
       return res.redirect(getRedirectUrlAfterLogin(req, req.session.user.role));
     }
 
-    res.render("auth/login", { error: null, values: {}, errors: {} });
+    res.render('auth/login', { error: null, values: {}, errors: {} });
   },
 
   register: async (req, res) => {
     try {
-      const {
-        fullname,
-        username,
-        email,
-        password,
-        role,
-        phoneNumber,
-        address,
-      } = req.body;
+      const { fullname, username, email, password, role, phoneNumber, address } = req.body;
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -122,7 +107,7 @@ const authController = {
         username,
         email,
         password: hashedPassword,
-        role: "customer",
+        role: 'customer',
         phoneNumber,
         address,
       });
@@ -132,7 +117,7 @@ const authController = {
           console.log(err);
           return renderAuthError(
             res,
-            "auth/register",
+            'auth/register',
             "Your account was created, but we couldn't start your session. Please log in.",
             { fullname, username, email, phoneNumber, address },
             500,
@@ -141,9 +126,9 @@ const authController = {
 
         setFlash(
           req,
-          "success",
-          "Success",
-          "Your account has been created and you are now logged in.",
+          'success',
+          'Success',
+          'Your account has been created and you are now logged in.',
         );
 
         // Redirect ke home customer
@@ -153,8 +138,8 @@ const authController = {
       console.log(error);
       renderAuthError(
         res,
-        "auth/register",
-        "Something went wrong while creating your account.",
+        'auth/register',
+        'Something went wrong while creating your account.',
         req.body,
         500,
       );
@@ -169,33 +154,19 @@ const authController = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return renderAuthError(
-          res,
-          "auth/login",
-          "Email or password is incorrect.",
-          values,
-          401,
-          {
-            email: "Email belum terdaftar atau tidak cocok.",
-            password: "Password salah. Coba masukkan password yang benar.",
-          },
-        );
+        return renderAuthError(res, 'auth/login', 'Email or password is incorrect.', values, 401, {
+          email: 'Email belum terdaftar atau tidak cocok.',
+          password: 'Password salah. Coba masukkan password yang benar.',
+        });
       }
 
       const match = await bcrypt.compare(password, user.password);
       const requestedTarget = normalizeRedirectTarget(req.session.redirectAfterLogin);
 
       if (!match) {
-        return renderAuthError(
-          res,
-          "auth/login",
-          "Email or password is incorrect.",
-          values,
-          401,
-          {
-            password: "Password salah. Coba masukkan password yang benar.",
-          },
-        );
+        return renderAuthError(res, 'auth/login', 'Email or password is incorrect.', values, 401, {
+          password: 'Password salah. Coba masukkan password yang benar.',
+        });
       }
 
       setLoggedInUser(req, user, (err) => {
@@ -203,14 +174,14 @@ const authController = {
           console.log(err);
           return renderAuthError(
             res,
-            "auth/login",
+            'auth/login',
             "We couldn't start your login session. Please try again.",
             values,
             500,
           );
         }
 
-        setFlash(req, "success", "Success", "You are now logged in.");
+        setFlash(req, 'success', 'Success', 'You are now logged in.');
 
         const targetUrl = getAllowedRedirectUrl(user.role, requestedTarget);
         res.redirect(targetUrl);
@@ -219,8 +190,8 @@ const authController = {
       console.log(error);
       renderAuthError(
         res,
-        "auth/login",
-        "Something went wrong on the server.",
+        'auth/login',
+        'Something went wrong on the server.',
         { email: req.body.email },
         500,
       );
@@ -233,9 +204,9 @@ const authController = {
         console.log(err);
       }
 
-      res.clearCookie("cravely.sid");
-      res.set("Cache-Control", "no-store");
-      res.redirect("/auth/login?logout=success");
+      res.clearCookie('cravely.sid');
+      res.set('Cache-Control', 'no-store');
+      res.redirect('/auth/login?logout=success');
     });
   },
 };

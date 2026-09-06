@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema(
   {
@@ -8,14 +8,14 @@ const orderSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     items: [
       {
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: 'Product',
           required: true,
         },
         quantity: {
@@ -40,16 +40,16 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        "Waiting Payment",
-        "Payment Verification",
-        "Confirmed",
-        "In Production",
-        "Ready for Delivery",
-        "Delivered",
-        "Completed",
-        "Rejected",
+        'Waiting Payment',
+        'Payment Verification',
+        'Confirmed',
+        'In Production',
+        'Ready for Delivery',
+        'Delivered',
+        'Completed',
+        'Rejected',
       ],
-      default: "Waiting Payment",
+      default: 'Waiting Payment',
     },
     shippingAddress: {
       type: String,
@@ -61,15 +61,11 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["Transfer", "QRIS", "COD"],
-      required: true,
-    },
-    createdAt: {
-      type: Date,
+      enum: ['Transfer', 'QRIS', 'COD'],
       required: true,
     },
   },
   { timestamps: true },
 );
 
-module.exports = mongoose.models.Order || mongoose.model("Order", orderSchema);
+module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);
