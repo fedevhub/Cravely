@@ -177,7 +177,7 @@
   }
 </style>
 
-<div class="modal fade confirm-modal" id="confirmSaveModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade confirm-modal" id="confirmSaveModal" tabindex="-1" aria-hidden="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
@@ -216,36 +216,48 @@
     if (!confirmModalElement || !window.bootstrap) return;
 
     const confirmModal = new bootstrap.Modal(confirmModalElement);
+
     let pendingForm = null;
 
+    // Semua form yang membutuhkan konfirmasi
     document.querySelectorAll('form.needs-confirm').forEach((form) => {
       form.addEventListener('submit', function (event) {
         event.preventDefault();
-        event.stopPropagation();
+
         pendingForm = form;
 
         const message =
-          form.dataset.confirmMessage || 'Apakah kamu yakin ingin menyimpan perubahan ini?';
+          form.dataset.confirmMessage ||
+          'Apakah kamu yakin ingin menyimpan perubahan ini?';
+
         document.getElementById('confirmSaveMessage').textContent = message;
+
         confirmModal.show();
       });
     });
 
+    // Tombol Ya, Simpan
     document.getElementById('confirmSaveOk').addEventListener('click', function () {
+      if (!pendingForm) return;
+
+      const form = pendingForm;
+      pendingForm = null;
+
+      // Lepaskan focus dari tombol
+      this.blur();
+
+      // Tutup modal
       confirmModal.hide();
 
-      if (pendingForm) {
-        const form = pendingForm;
-        pendingForm = null;
-
-        setTimeout(() => {
-          if (form.requestSubmit) {
-            form.requestSubmit();
-          } else {
-            HTMLFormElement.prototype.submit.call(form);
-          }
-        }, 300);
-      }
+      // Tunggu modal selesai ditutup
+      confirmModalElement.addEventListener(
+        'hidden.bs.modal',
+        function () {
+          // SUBMIT LANGSUNG TANPA MEMICU EVENT .needs-confirm
+          HTMLFormElement.prototype.submit.call(form);
+        },
+        { once: true }
+      );
     });
   });
 </script>

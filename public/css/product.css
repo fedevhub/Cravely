@@ -303,6 +303,11 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.badge-best {
+  top: 18px;
+  background: #c67d38;
+}
+
 .card-body {
   padding: 18px 20px;
   display: flex;

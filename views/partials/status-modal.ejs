@@ -245,10 +245,18 @@ message: error } : typeof flash !== "undefined" && flash ? flash : null; const m
   document.addEventListener('DOMContentLoaded', () => {
     const modalElement = document.getElementById('statusModal');
 
-    if (modalElement && window.bootstrap) {
-      const statusModal = new bootstrap.Modal(modalElement);
-      statusModal.show();
-    }
+    if (!modalElement || !window.bootstrap) return;
+
+    const statusModal = new bootstrap.Modal(modalElement);
+
+    // Saat modal selesai ditutup, lepaskan focus dari elemen di dalam modal
+    modalElement.addEventListener('hidden.bs.modal', () => {
+      if (document.activeElement && modalElement.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    });
+
+    statusModal.show();
   });
 </script>
 <% } %>

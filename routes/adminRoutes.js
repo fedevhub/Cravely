@@ -21,24 +21,9 @@ router.post('/reviews/:id/toggle', reviewController.toggleReview);
 router.get('/products', productController.getDaftarProduct);
 
 router.get('/tambahProducts', productController.getTambahProduct);
-router.post(
-  '/tambahProducts',
-  uploadImage.fields([
-    { name: 'image', maxCount: 1 },
-    { name: 'gallery', maxCount: 5 },
-  ]),
-  productController.tambahProduct,
-);
-
+router.post('/tambahProducts', uploadImage.single('image'), productController.tambahProduct);
 router.get('/editProducts/:id', productController.getEditProduct);
-router.post(
-  '/editProducts/:id',
-  uploadImage.fields([
-    { name: 'image', maxCount: 1 },
-    { name: 'gallery', maxCount: 5 },
-  ]),
-  productController.updateProduct,
-);
+router.post('/editProducts/:id', uploadImage.single('image'), productController.updateProduct);
 
 router.post('/deleteProducts/:id', productController.deleteProduct);
 

@@ -9,8 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=DM+Serif+Text:ital@0;1&family=Libertinus+Math&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=DM+Serif+Text:ital@0;1&family=Libertinus+Math&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/product.css">
@@ -33,8 +32,7 @@
                                             <%= productCountSavory %> Savory
                                 </p>
                             </div>
-                            <button class="btn-primary-custom" data-bs-toggle="modal"
-                                data-bs-target="#tambahProdukModal">
+                            <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#tambahProdukModal">
                                 <i class="fa-solid fa-plus me-2"></i> Tambah Product
                             </button>
                         </div>
@@ -52,8 +50,7 @@
 
                             <div class="search-box">
                                 <i class="fas fa-search search-icon"></i>
-                                <input type="text" id="searchInput" placeholder="Search products..."
-                                    class="search-input">
+                                <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
                             </div>
                         </div>
                     </div>
@@ -61,12 +58,10 @@
                     <div class="cards-scroll-container">
                         <div class="row g-4">
                             <% products.forEach(product=> { %>
-                                <div class="col-lg-4 col-md-6 mb-4 product-item"
-                                    data-category="<%= product.category.toLowerCase() %>">
+                                <div class="col-lg-4 col-md-6 mb-4 product-item" data-category="<%= product.category.toLowerCase() %>">
                                     <div class="product-card">
                                         <div class="card-image">
-                                            <img src="/img/<%= product.image %>" alt="<%= product.name %>"
-                                                class="card-img-top">
+                                            <img src="/img/<%= product.image %>" alt="<%= product.name %>" class="card-img-top">
 
                                             <div class="badge-left">
                                                 <% if(product.isActive==="ready stok" ) { %>
@@ -74,9 +69,9 @@
                                                     <% } else { %>
                                                         <span class="badge-status badge-preorder">Pre Order</span>
                                                         <% } %>
-                                                <% if (product.isBestSeller) { %>
-                                                    <span class="badge-best">Best Seller</span>
-                                                <% } %>
+                                                            <% if (product.isBestSeller) { %>
+                                                                <span class="badge-status badge-best">Best Seller</span>
+                                                                <% } %>
                                             </div>
 
                                             <div class="badge-right">
@@ -98,34 +93,27 @@
                                                 <div class="price">
                                                     <% if (product.discount > 0) { %>
                                                         <span class="price-old">Rp <%= Number(product.price).toLocaleString("id-ID") %></span>
-                                                    <% } %>
-                                                    <span class="currency">Rp</span>
-                                                    <%= Number(product.price * (1 - (product.discount || 0) / 100)).toLocaleString("id-ID") %>
-                                                    <% if (product.discount > 0) { %>
-                                                        <span class="badge-discount">-<%= product.discount %>%</span>
-                                                    <% } %>
-                                                    <small class="d-block text-muted">Stok: <%= product.stock ?? 0 %></small>
+                                                        <% } %>
+                                                            <span class="currency">Rp</span>
+                                                            <%= Number(product.price * (1 - (product.discount || 0) / 100)).toLocaleString("id-ID") %>
+                                                                <% if (product.discount > 0) { %>
+                                                                    <span class="badge-discount">-<%= product.discount %>%</span>
+                                                                    <% } %>
                                                 </div>
 
                                                 <div class="button-group">
-                                                    <a href="/dashboard/detailProducts/<%= product._id %>"
-                                                        class="icon-button view-button" title="View Detail">
+                                                    <a href="/dashboard/detailProducts/<%= product._id %>" class="icon-button view-button" title="View Detail">
                                                         <i class="fa-regular fa-eye"></i>
                                                     </a>
 
-                                                    <button class="icon-button edit-button" data-bs-toggle="modal"
-                                                        data-bs-target="#editProdukModal<%= product._id %>"
-                                                        title="Edit Product">
+                                                    <button class="icon-button edit-button" data-bs-toggle="modal" data-bs-target="#editProdukModal<%= product._id %>" title="Edit Product">
                                                         <i class="fa-regular fa-pen-to-square"></i>
                                                     </button>
 
-                                                    <form action="/dashboard/deleteProducts/<%= product._id %>"
-                                                        method="POST" class="delete-form">
-                                                        <button type="submit" class="icon-button delete-button"
-                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')"
-                                                            title="Delete Product">
-                                                            <i class="fa-regular fa-trash-can"></i>
-                                                        </button>
+                                                    <form action="/dashboard/deleteProducts/<%= product._id %>" method="POST" class="delete-form needs-confirm" data-confirm-message="Apakah Anda yakin ingin menghapus produk ini?">
+                                                        <button type="submit" class="icon-button delete-button" title="Delete Product">
+        <i class="fa-regular fa-trash-can"></i>
+    </button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -133,40 +121,41 @@
                                     </div>
                                 </div>
 
-                                <div class="modal fade" id="editProdukModal<%= product._id %>" tabindex="-1"
-                                    aria-hidden="true">
+                                <div class="modal fade" id="editProdukModal<%= product._id %>" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-md modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title">Edit Produk</h5>
-                                                <button type="button" class="btn-close btn-close-white"
-                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
 
                                             <div class="modal-body">
-                                                <form action="/dashboard/editProducts/<%= product._id %>" method="POST"
-                                                    enctype="multipart/form-data" class="needs-confirm"
-                                                    data-confirm-message="Simpan perubahan produk ini?">
+                                                <form action="/dashboard/editProducts/<%= product._id %>" method="POST" enctype="multipart/form-data" class="needs-confirm" data-confirm-message="Simpan perubahan produk ini?">
 
                                                     <!-- INFO UTAMA -->
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Nama Produk</label>
-                                                            <input type="text" class="form-control" name="name"
-                                                                placeholder="Masukkan nama produk"
-                                                                value="<%= product ? product.name : '' %>" required>
+                                                            <input type="text" class="form-control" name="name" placeholder="Masukkan nama produk" value="<%= product ? product.name : '' %>" required>
                                                         </div>
 
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Kategori</label>
                                                             <select class="form-select" name="category" required>
                                                                 <option value="">Pilih Kategori</option>
-                                                                <option value="sweet" <%=product &&
-                                                                    product.category==='sweet' ? 'selected' : '' %>
-                                                                    >Sweet</option>
-                                                                <option value="savory" <%=product &&
-                                                                    product.category==='savory' ? 'selected' : '' %>
-                                                                    >Savory</option>
+                                                                <option
+  value="sweet"
+  <%= product && product.category === 'sweet' ? 'selected' : '' %>
+>
+  Sweet
+</option>
+
+<option
+  value="savory"
+  <%= product && product.category === 'savory' ? 'selected' : '' %>
+>
+  Savory
+</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -174,46 +163,24 @@
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Harga (Rp)</label>
-                                                            <input type="number" class="form-control" name="price"
-                                                                placeholder="Contoh: 25000" min="0"
-                                                                value="<%= product ? product.price : '' %>" required>
+                                                            <input type="number" class="form-control" name="price" placeholder="Contoh: 25000" min="0" value="<%= product ? product.price : '' %>" required>
                                                         </div>
 
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Diskon (%)</label>
-                                                            <input type="number" class="form-control" name="discount"
-                                                                placeholder="Contoh: 10" min="0" max="100"
-                                                                value="<%= product ? (product.discount || 0) : 0 %>">
+                                                            <input type="number" class="form-control" name="discount" placeholder="Contoh: 10" min="0" max="100" value="<%= product ? (product.discount || 0) : 0 %>">
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="col-md-4 mb-3">
                                                             <label class="form-label">Stok</label>
-                                                            <input type="number" class="form-control" name="stock"
-                                                                placeholder="Contoh: 15" min="0"
-                                                                value="<%= product ? (product.stock ?? 0) : 0 %>">
-                                                        </div>
-
-                                                        <div class="col-md-4 mb-3">
-                                                            <label class="form-label">Kapasitas Stok</label>
-                                                            <input type="number" class="form-control" name="stockCapacity"
-                                                                placeholder="Contoh: 20" min="0"
-                                                                value="<%= product ? (product.stockCapacity ?? 20) : 20 %>">
-                                                        </div>
-
-                                                        <div class="col-md-4 mb-3">
-                                                            <label class="form-label">Stok Minimum</label>
-                                                            <input type="number" class="form-control" name="minimumStock"
-                                                                placeholder="Contoh: 5" min="0"
-                                                                value="<%= product ? (product.minimumStock ?? 5) : 5 %>">
+                                                            <input type="number" class="form-control" name="stock" placeholder="Contoh: 15" min="0" value="<%= product ? (product.stock ?? 0) : 0 %>">
                                                         </div>
                                                     </div>
 
                                                     <div class="form-check form-switch best-seller-switch mb-3">
-                                                        <input class="form-check-input" type="checkbox" role="switch"
-                                                            id="bestSellerEdit<%= product._id %>" name="bestSeller"
-                                                            <%= product && product.isBestSeller ? 'checked' : '' %>>
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="bestSellerEdit<%= product._id %>" name="bestSeller" <%=product && product.isBestSeller ? 'checked' : '' %>>
                                                         <label class="form-check-label" for="bestSellerEdit<%= product._id %>">
                                                             <i class="fa-solid fa-fire" style="color:#d5a34a;"></i> Tandai sebagai Best Seller
                                                         </label>
@@ -224,60 +191,49 @@
                                                             <label class="form-label">Status Produk</label>
                                                             <select class="form-select" name="isActive" required>
                                                                 <option value="">Pilih Status</option>
-                                                                <option value="ready stok" <%=product &&
-                                                                    product.isActive==='ready stok' ? 'selected' : '' %>
-                                                                    >Ready Stok</option>
-                                                                <option value="pre order" <%=product &&
-                                                                    product.isActive==='pre order' ? 'selected' : '' %>
-                                                                    >Pre Order</option>
+                                                                <option value="ready stok" <%= product.isActive === 'ready stok' ? 'selected' : '' %>>
+  Ready Stok
+</option>
+
+<option value="pre order" <%= product.isActive === 'pre order' ? 'selected' : '' %>>
+  Pre Order
+</option>
                                                             </select>
                                                         </div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label class="form-label">Deskripsi Singkat</label>
-                                                        <textarea class="form-control" name="description" rows="2"
-                                                            placeholder="Tuliskan deskripsi ringkas produk..."
-                                                            required><%= product ? product.description : '' %></textarea>
+                                                        <textarea class="form-control" name="description" rows="2" placeholder="Tuliskan deskripsi ringkas produk..." required><%= product ? product.description : '' %></textarea>
                                                     </div>
 
                                                     <hr class="my-4">
-                                                    <h6 class="mb-3 font-weight-bold text-primary">Detail Produk
-                                                        Tambahan</h6>
+                                                    <h6 class="mb-3 font-weight-bold text-primary">Detail Produk Tambahan
+                                                    </h6>
 
                                                     <!-- DETAIL: FULL DESCRIPTION -->
                                                     <div class="mb-3">
                                                         <label class="form-label">Deskripsi Lengkap</label>
-                                                        <textarea class="form-control" name="detail[fullDescription]"
-                                                            rows="4"
-                                                            placeholder="Tuliskan deskripsi lengkap produk..."><%= (product && product.detail) ? product.detail.fullDescription : '' %></textarea>
+                                                        <textarea class="form-control" name="detail[fullDescription]" rows="4" placeholder="Tuliskan deskripsi lengkap produk..."><%= (product && product.detail) ? product.detail.fullDescription : '' %></textarea>
                                                     </div>
 
                                                     <!-- DETAIL: WEIGHT & SERVINGS -->
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Berat / Ukuran</label>
-                                                            <input type="text" class="form-control"
-                                                                name="detail[weight]"
-                                                                placeholder="Contoh: 250 gram / 500 ml"
-                                                                value="<%= (product && product.detail) ? product.detail.weight : '' %>">
+                                                            <input type="text" class="form-control" name="detail[weight]" placeholder="Contoh: 250 gram / 500 ml" value="<%= (product && product.detail) ? product.detail.weight : '' %>">
                                                         </div>
 
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Porsi / Servings</label>
-                                                            <input type="text" class="form-control"
-                                                                name="detail[servings]" placeholder="Contoh: 2-3 Porsi"
-                                                                value="<%= (product && product.detail) ? product.detail.servings : '' %>">
+                                                            <input type="text" class="form-control" name="detail[servings]" placeholder="Contoh: 2-3 Porsi" value="<%= (product && product.detail) ? product.detail.servings : '' %>">
                                                         </div>
                                                     </div>
 
                                                     <!-- DETAIL: INGREDIENTS -->
                                                     <div class="mb-3">
                                                         <label class="form-label">Bahan-bahan (Komposisi)</label>
-                                                        <input type="text" class="form-control"
-                                                            name="detail[ingredients]"
-                                                            placeholder="Pisahkan dengan koma (Contoh: Tepung, Gula, Cokelat, Telur)"
-                                                            value="<%= (product && product.detail && product.detail.ingredients) ? product.detail.ingredients.join(', ') : '' %>">
+                                                        <input type="text" class="form-control" name="detail[ingredients]" placeholder="Pisahkan dengan koma (Contoh: Tepung, Gula, Cokelat, Telur)" value="<%= (product && product.detail && product.detail.ingredients) ? product.detail.ingredients.join(', ') : '' %>">
                                                         <small class="text-muted">Masukkan daftar bahan dipisahkan
                                                             dengan tanda koma.</small>
                                                     </div>
@@ -290,12 +246,10 @@
                                                         <label class="form-label">Gambar Utama Produk</label>
                                                         <% if (product && product.image) { %>
                                                             <div class="image-preview-wrapper mb-2">
-                                                                <img src="/img/<%= product.image %>" alt="Preview Utama"
-                                                                    class="img-thumbnail" style="max-height: 120px;">
+                                                                <img src="/img/<%= product.image %>" alt="Preview Utama" class="img-thumbnail" style="max-height: 120px;">
                                                             </div>
                                                             <% } %>
-                                                                <input type="file" class="form-control" name="image"
-                                                                    accept="image/*">
+                                                                <input type="file" class="form-control" name="image" accept="image/*">
                                                                 <small class="text-muted">Biarkan kosong jika tidak
                                                                     ingin mengubah gambar utama.</small>
                                                     </div>
@@ -309,15 +263,12 @@
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
                                                                 <% product.detail.gallery.forEach(function(img) { %>
                                                                     <div class="position-relative">
-                                                                        <img src="/img/<%= img %>" alt="Gallery"
-                                                                            class="img-thumbnail"
-                                                                            style="width: 80px; height: 80px; object-fit: cover;">
+                                                                        <img src="/img/<%= img %>" alt="Gallery" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
                                                                     </div>
                                                                     <% }); %>
                                                             </div>
                                                             <% } %>
-                                                                <input type="file" class="form-control" name="gallery"
-                                                                    multiple accept="image/*">
+                                                                <input type="file" class="form-control" name="gallery" multiple accept="image/*">
                                                                 <small class="text-muted">Pilih file baru jika ingin
                                                                     menambah/memperbarui galeri
                                                                     foto.</small>
@@ -325,8 +276,7 @@
 
 
                                                     <div class="modal-actions">
-                                                        <button type="button" class="btn-cancel"
-                                                            data-bs-dismiss="modal">Batal</button>
+                                                        <button type="button" class="btn-cancel" data-bs-dismiss="modal">Batal</button>
                                                         <button type="submit" class="btn-submit">
                                                             <i class="fas fa-save"></i> Simpan
                                                         </button>
@@ -348,20 +298,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Produk Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form action="/dashboard/tambahProducts" method="POST" enctype="multipart/form-data" class="needs-confirm"
-                        data-confirm-message="Tambah produk baru ini?">
+                    <form action="/dashboard/tambahProducts" method="POST" enctype="multipart/form-data" class="needs-confirm" data-confirm-message="Tambah produk baru ini?">
 
-                        <!-- INFO UTAMA -->
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nama Produk</label>
-                                <input type="text" class="form-control" name="name" required
-                                    placeholder="Masukkan nama produk">
+                                <input type="text" class="form-control" name="name" required placeholder="Masukkan nama produk">
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -377,40 +324,24 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Harga (Rp)</label>
-                                <input type="number" class="form-control" name="price" required
-                                    placeholder="Contoh: 25000" min="0">
+                                <input type="number" class="form-control" name="price" required placeholder="Contoh: 25000" min="0">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Diskon (%)</label>
-                                <input type="number" class="form-control" name="discount"
-                                    placeholder="Contoh: 10" min="0" max="100" value="0">
+                                <input type="number" class="form-control" name="discount" placeholder="Contoh: 10" min="0" max="100" value="0">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Stok</label>
-                                <input type="number" class="form-control" name="stock"
-                                    placeholder="Contoh: 15" min="0" value="0">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Kapasitas Stok</label>
-                                <input type="number" class="form-control" name="stockCapacity"
-                                    placeholder="Contoh: 20" min="0" value="20">
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Stok Minimum</label>
-                                <input type="number" class="form-control" name="minimumStock"
-                                    placeholder="Contoh: 5" min="0" value="5">
+                                <input type="number" class="form-control" name="stock" placeholder="Contoh: 15" min="0" value="0">
                             </div>
                         </div>
 
                         <div class="form-check form-switch best-seller-switch mb-3">
-                            <input class="form-check-input" type="checkbox" role="switch" id="bestSellerAdd"
-                                name="bestSeller">
+                            <input class="form-check-input" type="checkbox" role="switch" id="bestSellerAdd" name="bestSeller">
                             <label class="form-check-label" for="bestSellerAdd">
                                 <i class="fa-solid fa-fire" style="color:#d5a34a;"></i> Tandai sebagai Best Seller
                             </label>
@@ -429,8 +360,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Deskripsi Singkat</label>
-                            <textarea class="form-control" name="description" rows="2" required
-                                placeholder="Tuliskan deskripsi ringkas produk..."></textarea>
+                            <textarea class="form-control" name="description" rows="2" required placeholder="Tuliskan deskripsi ringkas produk..."></textarea>
                         </div>
 
                         <hr class="my-4">
@@ -439,50 +369,37 @@
                         <!-- DETAIL: FULL DESCRIPTION -->
                         <div class="mb-3">
                             <label class="form-label">Deskripsi Lengkap</label>
-                            <textarea class="form-control" name="detail[fullDescription]" rows="4"
-                                placeholder="Tuliskan deskripsi lengkap produk..."></textarea>
+                            <textarea class="form-control" name="detail[fullDescription]" rows="4" placeholder="Tuliskan deskripsi lengkap produk..."></textarea>
                         </div>
 
                         <!-- DETAIL: WEIGHT & SERVINGS -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Berat / Ukuran</label>
-                                <input type="text" class="form-control" name="detail[weight]"
-                                    placeholder="Contoh: 250 gram / 500 ml">
+                                <input type="text" class="form-control" name="detail[weight]" placeholder="Contoh: 250 gram / 500 ml">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Porsi / Servings</label>
-                                <input type="text" class="form-control" name="detail[servings]"
-                                    placeholder="Contoh: 2-3 Porsi">
+                                <input type="text" class="form-control" name="detail[servings]" placeholder="Contoh: 2-3 Porsi">
                             </div>
                         </div>
 
                         <!-- DETAIL: INGREDIENTS -->
                         <div class="mb-3">
                             <label class="form-label">Bahan-bahan (Komposisi)</label>
-                            <input type="text" class="form-control" name="detail[ingredients]"
-                                placeholder="Pisahkan dengan koma (Contoh: Tepung, Gula, Cokelat, Telur)">
+                            <input type="text" class="form-control" name="detail[ingredients]" placeholder="Pisahkan dengan koma (Contoh: Tepung, Gula, Cokelat, Telur)">
                             <small class="text-muted">Masukkan daftar bahan dipisahkan dengan tanda koma.</small>
                         </div>
 
                         <hr class="my-4">
                         <h6 class="mb-3 font-weight-bold text-primary">Upload Gambar</h6>
 
-                        <!-- GAMBAR UTAMA -->
                         <div class="mb-3">
                             <label class="form-label">Gambar Utama Produk</label>
                             <input type="file" class="form-control" name="image" required accept="image/*">
                         </div>
 
-                        <!-- DETAIL: GALLERY -->
-                        <div class="mb-4">
-                            <label class="form-label">Galeri Foto Tambahan (Bisa pilih beberapa)</label>
-                            <input type="file" class="form-control" name="gallery" multiple accept="image/*">
-                            <small class="text-muted">Pilih satu atau beberapa foto tambahan untuk galeri.</small>
-                        </div>
-
-                        <!-- ACTION BUTTONS -->
                         <div class="modal-actions">
                             <button type="button" class="btn-cancel" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn-submit">
@@ -496,49 +413,50 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <%- include('../partials/confirm-modal') %>
-    <%- include('../partials/status-modal') %>
+        <%- include('../partials/status-modal') %>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const filterButtons = document.querySelectorAll('.filter-btn');
-                const searchInput = document.getElementById('searchInput');
-                const productItems = document.querySelectorAll('.product-item');
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const filterButtons = document.querySelectorAll('.filter-btn');
+                    const searchInput = document.getElementById('searchInput');
+                    const productItems = document.querySelectorAll('.product-item');
 
-                let currentFilter = 'all';
-                let searchQuery = '';
+                    let currentFilter = 'all';
+                    let searchQuery = '';
 
-                function filterProducts() {
-                    productItems.forEach(item => {
-                        const titleElement = item.querySelector('.card-title');
-                        const productName = titleElement ? titleElement.textContent.toLowerCase() : '';
+                    function filterProducts() {
+                        productItems.forEach(item => {
+                            const titleElement = item.querySelector('.card-title');
+                            const productName = titleElement ? titleElement.textContent.toLowerCase() : '';
 
-                        const productCategory = item.getAttribute('data-category');
-                        const matchesCategory = (currentFilter === 'all') || (productCategory === currentFilter);
-                        const matchesSearch = productName.includes(searchQuery);
-                        if (matchesCategory && matchesSearch) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
+                            const productCategory = item.getAttribute('data-category');
+                            const matchesCategory = (currentFilter === 'all') || (productCategory === currentFilter);
+                            const matchesSearch = productName.includes(searchQuery);
+                            if (matchesCategory && matchesSearch) {
+                                item.style.display = 'block';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }
+
+                    filterButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            filterButtons.forEach(btn => btn.classList.remove('active'));
+                            this.classList.add('active');
+
+                            currentFilter = this.getAttribute('data-filter');
+                            filterProducts();
+                        });
                     });
-                }
 
-                filterButtons.forEach(button => {
-                    button.addEventListener('click', function () {
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
-                        this.classList.add('active');
-
-                        currentFilter = this.getAttribute('data-filter');
+                    searchInput.addEventListener('input', function() {
+                        searchQuery = this.value.toLowerCase().trim();
                         filterProducts();
                     });
-                });
 
-                searchInput.addEventListener('input', function () {
-                    searchQuery = this.value.toLowerCase().trim();
-                    filterProducts();
                 });
-            });
-        </script>
+            </script>
 </body>
 
 </html>

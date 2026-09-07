@@ -51,8 +51,6 @@ const productController = {
         isActive: isActive || null,
         image: image,
         stock: Number(req.body.stock) || 0,
-        stockCapacity: Number(req.body.stockCapacity) || 20,
-        minimumStock: Number(req.body.minimumStock) || 5,
         discount: Number(req.body.discount) || 0,
         isBestSeller: req.body.bestSeller === 'on' || req.body.bestSeller === 'true',
       });
@@ -111,14 +109,6 @@ const productController = {
           req.body.stock !== undefined && req.body.stock !== ''
             ? Number(req.body.stock)
             : existingProduct.stock,
-        stockCapacity:
-          req.body.stockCapacity !== undefined && req.body.stockCapacity !== ''
-            ? Number(req.body.stockCapacity)
-            : existingProduct.stockCapacity,
-        minimumStock:
-          req.body.minimumStock !== undefined && req.body.minimumStock !== ''
-            ? Number(req.body.minimumStock)
-            : existingProduct.minimumStock,
         discount:
           req.body.discount !== undefined && req.body.discount !== ''
             ? Number(req.body.discount)

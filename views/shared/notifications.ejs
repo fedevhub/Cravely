@@ -27,9 +27,6 @@
                         <h1>Notifications</h1>
                         <p class="profile-subtitle">Pesanan dan aktivitas terbaru akan muncul di sini.</p>
                     </div>
-                    <form method="POST" action="/notifications/read-all">
-                        <button class="customer-button outline" type="submit"><i class="fa-solid fa-check-double"></i> Mark all read</button>
-                    </form>
                 </header>
                 <section class="notification-card">
                     <% if (notifications.length) { notifications.forEach((notification) => { %>
